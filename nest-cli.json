@@ -10,6 +10,15 @@
   "monorepo": true,
   "root": "apps/snapmatch",
   "projects": {
+    "clock-service": {
+      "type": "application",
+      "root": "apps/clock-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/clock-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/clock-service/tsconfig.app.json"
+      }
+    },
     "snapmatch": {
       "type": "application",
       "root": "apps/snapmatch",
