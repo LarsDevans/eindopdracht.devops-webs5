@@ -19,6 +19,15 @@
         "tsConfigPath": "apps/clock-service/tsconfig.app.json"
       }
     },
+    "mail-service": {
+      "type": "application",
+      "root": "apps/mail-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/mail-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mail-service/tsconfig.app.json"
+      }
+    },
     "score-service": {
       "type": "application",
       "root": "apps/score-service",
