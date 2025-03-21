@@ -19,6 +19,15 @@
         "tsConfigPath": "apps/clock-service/tsconfig.app.json"
       }
     },
+    "score-service": {
+      "type": "application",
+      "root": "apps/score-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/score-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/score-service/tsconfig.app.json"
+      }
+    },
     "snapmatch": {
       "type": "application",
       "root": "apps/snapmatch",
