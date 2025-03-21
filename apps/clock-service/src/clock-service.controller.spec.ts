@@ -11,7 +11,9 @@ describe('ClockServiceController', () => {
       providers: [ClockServiceService],
     }).compile();
 
-    clockServiceController = app.get<ClockServiceController>(ClockServiceController);
+    clockServiceController = app.get<ClockServiceController>(
+      ClockServiceController,
+    );
   });
 
   describe('root', () => {

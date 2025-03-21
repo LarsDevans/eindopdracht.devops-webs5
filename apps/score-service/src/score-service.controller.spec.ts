@@ -11,7 +11,9 @@ describe('ScoreServiceController', () => {
       providers: [ScoreServiceService],
     }).compile();
 
-    scoreServiceController = app.get<ScoreServiceController>(ScoreServiceController);
+    scoreServiceController = app.get<ScoreServiceController>(
+      ScoreServiceController,
+    );
   });
 
   describe('root', () => {
