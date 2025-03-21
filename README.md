@@ -7,3 +7,20 @@
 <p align="center">
   De gecombineerde eindopdracht van DEVOPS en WEBS5 🐳 ☁️
 </p>
+
+# Development setup
+
+Checkout `package.json` for all available NPM command.
+
+## Installation
+
+```bash
+$ npm install
+$ npm run start
+```
+
+## Validation
+
+```bash
+$ npm run test
+```
