@@ -19,6 +19,15 @@
         "tsConfigPath": "apps/snapmatch/tsconfig.app.json"
       }
     },
+    "submission-service": {
+      "type": "application",
+      "root": "apps/submission-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/submission-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/submission-service/tsconfig.app.json"
+      }
+    },
     "target-service": {
       "type": "application",
       "root": "apps/target-service",
