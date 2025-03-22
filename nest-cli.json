@@ -1,8 +1,68 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/snapmatch/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/snapmatch/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/snapmatch",
+  "projects": {
+    "clock-service": {
+      "type": "application",
+      "root": "apps/clock-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/clock-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/clock-service/tsconfig.app.json"
+      }
+    },
+    "mail-service": {
+      "type": "application",
+      "root": "apps/mail-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/mail-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mail-service/tsconfig.app.json"
+      }
+    },
+    "score-service": {
+      "type": "application",
+      "root": "apps/score-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/score-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/score-service/tsconfig.app.json"
+      }
+    },
+    "snapmatch": {
+      "type": "application",
+      "root": "apps/snapmatch",
+      "entryFile": "main",
+      "sourceRoot": "apps/snapmatch/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/snapmatch/tsconfig.app.json"
+      }
+    },
+    "submission-service": {
+      "type": "application",
+      "root": "apps/submission-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/submission-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/submission-service/tsconfig.app.json"
+      }
+    },
+    "target-service": {
+      "type": "application",
+      "root": "apps/target-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/target-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/target-service/tsconfig.app.json"
+      }
+    }
   }
 }
