@@ -28,6 +28,15 @@
         "tsConfigPath": "apps/mail-service/tsconfig.app.json"
       }
     },
+    "read-service": {
+      "type": "application",
+      "root": "apps/read-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/read-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/read-service/tsconfig.app.json"
+      }
+    },
     "score-service": {
       "type": "application",
       "root": "apps/score-service",
