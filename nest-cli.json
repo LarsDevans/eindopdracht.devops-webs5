@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/snapmatch/src",
+  "sourceRoot": "apps/read-service/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/snapmatch/tsconfig.app.json"
+    "tsConfigPath": "apps/read-service/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/snapmatch",
+  "root": "apps/read-service",
   "projects": {
     "clock-service": {
       "type": "application",
@@ -44,15 +44,6 @@
       "sourceRoot": "apps/score-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/score-service/tsconfig.app.json"
-      }
-    },
-    "snapmatch": {
-      "type": "application",
-      "root": "apps/snapmatch",
-      "entryFile": "main",
-      "sourceRoot": "apps/snapmatch/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/snapmatch/tsconfig.app.json"
       }
     },
     "submission-service": {
