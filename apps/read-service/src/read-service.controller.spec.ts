@@ -11,7 +11,9 @@ describe('ReadServiceController', () => {
       providers: [ReadServiceService],
     }).compile();
 
-    readServiceController = app.get<ReadServiceController>(ReadServiceController);
+    readServiceController = app.get<ReadServiceController>(
+      ReadServiceController,
+    );
   });
 
   describe('root', () => {
