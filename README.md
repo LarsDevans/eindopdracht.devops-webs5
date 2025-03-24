@@ -15,12 +15,15 @@ Checkout `package.json` for all available NPM command.
 ## Installation
 
 ```bash
-$ npm install
-$ npm run start
+$ docker compose build
+$ docker compose up # Optional: add the -d flag to detach the terminal
 ```
 
 ## Validation
 
 ```bash
-$ npm run test
+$ curl -Is http://localhost:3000 | head -n 1
+HTTP/1.1 200 OK
+$ curl -Is http://localhost:15672 | head -n 1
+HTTP/1.1 200 OK
 ```
