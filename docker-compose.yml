@@ -1,0 +1,62 @@
+services:
+  amqp-service:
+    image: rabbitmq:4-management-alpine
+    ports:
+      - '5672:5672' # AMQP
+      - '15672:15672' # Dashboard
+    networks:
+      - snapnet
+
+  clock-service:
+    build:
+      args:
+        SERVICE: clock-service
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  mail-service:
+    build:
+      args:
+        SERVICE: mail-service
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  read-service:
+    build:
+      args:
+        SERVICE: read-service
+    extends:
+      file: docker-base.yml
+      service: base-service
+    ports:
+      - '3000:3000'
+
+  score-service:
+    build:
+      args:
+        SERVICE: score-service
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  submission-service:
+    build:
+      args:
+        SERVICE: submission-service
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  target-service:
+    build:
+      args:
+        SERVICE: target-service
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+networks:
+  snapnet:
+    driver: bridge

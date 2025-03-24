@@ -1,0 +1,10 @@
+services:
+  base-service:
+    build:
+      context: .
+    depends_on:
+      - amqp-service
+    environment:
+      - NODE_ENV=production
+    networks:
+      - snapnet
