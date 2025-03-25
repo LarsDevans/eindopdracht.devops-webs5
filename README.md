@@ -23,6 +23,14 @@ $ docker compose build
 $ docker compose up # Optional: add the -d flag to detach the terminal
 ```
 
+### For reinstallation
+
+To ensure the database creation script (initdb.d) runs correctly, you must remove the Docker volumes. Simply removing the containers isn't enough, as MySQL skips the script if the database files already exist. Use the following command to remove both containers and volumes:
+
+```bash
+$ docker-compose down -v
+```
+
 ## Validation
 
 ```bash
