@@ -14,6 +14,10 @@ Checkout `package.json` for all available NPM command.
 
 ## Installation
 
+1. Create a copy of `.env.example` and rename it to `.env`.
+2. Update the environment variables if applicable.
+3. Open the project's terminal and run the following command:
+
 ```bash
 $ docker compose build
 $ docker compose up # Optional: add the -d flag to detach the terminal

@@ -5,6 +5,6 @@ services:
     depends_on:
       - amqp-service
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV}
     networks:
       - snapnet
