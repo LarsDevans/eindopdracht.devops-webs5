@@ -1,5 +1,47 @@
+# Node.js dependencies
 node_modules/
+
+# Build artifacts
 dist/
+*.tsbuildinfo
+
+# Logs
 *.log
+
+# Test files
+test/
+*.spec.ts
+*.e2e-spec.ts
+jest-e2e.json
+coverage/
+
+# IDE/editor configurations
+.vscode/
+.idea/
+
+# Git version control files
+.git/
+.gitignore
+
+# Docker-related files
+.dockerignore
+Dockerfile
+docker-compose.yml
+docker-base.yml
+
+# Environment variables
+.env
+.env.*
+
+# Database initialization scripts
+init-databases.sql
+
+# Package files
+package-lock.json
+
+# Linter and formatter configuration
+.eslintrc.js
+.prettierrc
+
+# Documentation file
 *.md
-.git
