@@ -1,0 +1,89 @@
+services:
+  amqp-service:
+    image: rabbitmq:4-management-alpine
+    ports:
+      - '${AMQP_PORT}:5672'
+      - '${AMQP_DASHBOARD_PORT}:15672'
+    networks:
+      - snapnet
+
+  clock-service:
+    build:
+      args:
+        SERVICE: ${SERVICE_CLOCK_SERVICE}
+    environment:
+      - DB_NAME=${MYSQL_CLOCK_DB}
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  mail-service:
+    build:
+      args:
+        SERVICE: ${SERVICE_MAIL_SERVICE}
+    environment:
+      - DB_NAME=${MYSQL_MAIL_DB}
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  mysql-service:
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    image: mysql:9
+    networks:
+      - snapnet
+    ports:
+      - '${MYSQL_PORT}:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+
+  read-service:
+    build:
+      args:
+        SERVICE: ${SERVICE_READ_SERVICE}
+    environment:
+      - DB_NAME=${MYSQL_READ_DB}
+    extends:
+      file: docker-base.yml
+      service: base-service
+    ports:
+      - '${READ_SERVICE_PORT}:3000'
+
+  score-service:
+    build:
+      args:
+        SERVICE: ${SERVICE_SCORE_SERVICE}
+    environment:
+      - DB_NAME=${MYSQL_SCORE_DB}
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  submission-service:
+    build:
+      args:
+        SERVICE: ${SERVICE_SUBMISSION_SERVICE}
+    environment:
+      - DB_NAME=${MYSQL_SUBMISSION_DB}
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+  target-service:
+    build:
+      args:
+        SERVICE: ${SERVICE_TARGET_SERVICE}
+    environment:
+      - DB_NAME=${MYSQL_TARGET_DB}
+    extends:
+      file: docker-base.yml
+      service: base-service
+
+networks:
+  snapnet:
+    driver: bridge
+
+volumes:
+  mysql_data:

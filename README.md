@@ -14,13 +14,28 @@ Checkout `package.json` for all available NPM command.
 
 ## Installation
 
+1. Create a copy of `.env.example` and rename it to `.env`.
+2. Update the environment variables if applicable.
+3. Open the project's terminal and run the following command:
+
 ```bash
-$ npm install
-$ npm run start
+$ docker compose build
+$ docker compose up # Optional: add the -d flag to detach the terminal
+```
+
+### For reinstallation
+
+To ensure the database creation script (initdb.d) runs correctly, you must remove the Docker volumes. Simply removing the containers isn't enough, as MySQL skips the script if the database files already exist. Use the following command to remove both containers and volumes:
+
+```bash
+$ docker-compose down -v
 ```
 
 ## Validation
 
 ```bash
-$ npm run test
+$ curl -Is http://localhost:3000 | head -n 1
+HTTP/1.1 200 OK
+$ curl -Is http://localhost:15672 | head -n 1
+HTTP/1.1 200 OK
 ```
