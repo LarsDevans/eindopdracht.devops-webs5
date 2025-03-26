@@ -5,6 +5,8 @@ services:
     depends_on:
       - amqp-service
       - mysql-service
+    env_file:
+      - .env
     environment:
       - DB_HOST=http://mysql-service
       - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
