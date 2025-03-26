@@ -14,7 +14,7 @@ services:
     environment:
       - DB_NAME=${MYSQL_CLOCK_DB}
     extends:
-      file: docker-base.yml
+      file: ${DOCKER_BASE_FILE:?}
       service: base-service
 
   mail-service:
@@ -24,7 +24,7 @@ services:
     environment:
       - DB_NAME=${MYSQL_MAIL_DB}
     extends:
-      file: docker-base.yml
+      file: ${DOCKER_BASE_FILE:?}
       service: base-service
 
   mysql-service:
@@ -46,7 +46,7 @@ services:
     environment:
       - DB_NAME=${MYSQL_READ_DB}
     extends:
-      file: docker-base.yml
+      file: ${DOCKER_BASE_FILE:?}
       service: base-service
     ports:
       - '${READ_SERVICE_PORT}:3000'
@@ -58,7 +58,7 @@ services:
     environment:
       - DB_NAME=${MYSQL_SCORE_DB}
     extends:
-      file: docker-base.yml
+      file: ${DOCKER_BASE_FILE:?}
       service: base-service
 
   submission-service:
@@ -68,7 +68,7 @@ services:
     environment:
       - DB_NAME=${MYSQL_SUBMISSION_DB}
     extends:
-      file: docker-base.yml
+      file: ${DOCKER_BASE_FILE:?}
       service: base-service
 
   target-service:
@@ -78,7 +78,7 @@ services:
     environment:
       - DB_NAME=${MYSQL_TARGET_DB}
     extends:
-      file: docker-base.yml
+      file: ${DOCKER_BASE_FILE:?}
       service: base-service
 
 networks:
