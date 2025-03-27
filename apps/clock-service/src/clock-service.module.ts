@@ -14,19 +14,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_CLOCK_DB,
     }),
-    ClientsModule.register([
-      {
-        name: 'CLOCK_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://rabbitmq-service:5672'],
-          queue: 'clock_queue',
-          queueOptions: {
-            durable: false,
-          },
-        },
-      },
-    ]),
   ],
   controllers: [ClockServiceController],
   providers: [ClockServiceService],
