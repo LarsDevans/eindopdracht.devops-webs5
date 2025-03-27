@@ -2,8 +2,8 @@ services:
   rabbitmq-service:
     image: rabbitmq:4-management-alpine
     ports:
-      - '${RABBITMQ_PORT}:5672'
-      - '${RABBITMQ_DASHBOARD_PORT}:15672'
+      - '${AMQP_PORT}:5672'
+      - '${AMQP_DASHBOARD_PORT}:15672'
     networks:
       - snapnet
 
