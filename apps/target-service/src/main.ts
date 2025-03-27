@@ -10,7 +10,7 @@ async function bootstrap() {
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://rabbitmq-service:5672'],
-          queue: 'clock_queue',
+          queue: 'target_queue',
           noAck: false,
           queueOptions: {
             durable: false

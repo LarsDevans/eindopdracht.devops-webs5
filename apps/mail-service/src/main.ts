@@ -1,11 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { MailServiceModule } from './mail-service.module';
-import { MicroserviceOptions } from '@nestjs/microservices';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app =
     await NestFactory.createMicroservice<MicroserviceOptions>(
       MailServiceModule,
+      {
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://rabbitmq-service:5672'],
+          queue: 'mail_queue',
+          noAck: false,
+          queueOptions: {
+            durable: false
+          },
+        },
+      },
     );
   await app.listen();
 }
