@@ -8,6 +8,15 @@
   De gecombineerde eindopdracht van DEVOPS en WEBS5 🐳 ☁️
 </p>
 
+<p align="center">
+  <a href="https://github.com/LarsDevans/eindopdracht.devops-webs5/actions/workflows/build-and-test.yml">
+    <img src="https://github.com/LarsDevans/eindopdracht.devops-webs5/actions/workflows/build-and-test.yml/badge.svg?branch=development">
+  </a>
+  <a href="https://github.com/LarsDevans/eindopdracht.devops-webs5/actions/workflows/static-analysis.yml">
+    <img src="https://github.com/LarsDevans/eindopdracht.devops-webs5/actions/workflows/static-analysis.yml/badge.svg">
+  </a>
+</p>
+
 # Development setup
 
 Checkout `package.json` for all available NPM command.
