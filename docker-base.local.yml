@@ -3,7 +3,7 @@ services:
     build:
       context: .
     depends_on:
-      - amqp-service
+      - rabbitmq-service
       - mysql-service
     env_file:
       - .env
