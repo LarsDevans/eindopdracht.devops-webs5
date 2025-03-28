@@ -11,9 +11,6 @@ async function bootstrap() {
         urls: [`${process.env.RABBITMQ_URI}:${process.env.RABBITMQ_PORT}`],
         queue: `${process.env.RABBITMQ_SCORE_QUEUE}`,
         noAck: false,
-        queueOptions: {
-          durable: false,
-        },
       },
     },
   );
