@@ -3,21 +3,20 @@ import { TargetServiceModule } from './target-service.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app =
-    await NestFactory.createMicroservice<MicroserviceOptions>(
-      TargetServiceModule,
-      {
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://rabbitmq-service:5672'],
-          queue: 'target_queue',
-          noAck: false,
-          queueOptions: {
-            durable: false
-          },
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    TargetServiceModule,
+    {
+      transport: Transport.RMQ,
+      options: {
+        urls: [`${process.env.RABBITMQ_URI}:${process.env.RABBITMQ_PORT}`],
+        queue: `${process.env.RABBITMQ_TARGET_QUEUE}`,
+        noAck: false,
+        queueOptions: {
+          durable: false,
         },
       },
-    );
+    },
+  );
   await app.listen();
 }
 bootstrap();

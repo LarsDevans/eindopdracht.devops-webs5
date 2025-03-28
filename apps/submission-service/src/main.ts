@@ -6,16 +6,16 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     SubmissionServiceModule,
     {
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://rabbitmq-service:5672'],
-          queue: 'submission_queue',
-          noAck: false,
-          queueOptions: {
-            durable: false
-          },
+      transport: Transport.RMQ,
+      options: {
+        urls: [`${process.env.RABBITMQ_URI}:${process.env.RABBITMQ_PORT}`],
+        queue: `${process.env.RABBITMQ_SUBMISSION_QUEUE}`,
+        noAck: false,
+        queueOptions: {
+          durable: false,
         },
       },
+    },
   );
   await app.listen();
 }
