@@ -27,7 +27,7 @@ coverage/
 .dockerignore
 Dockerfile
 docker-compose.yml
-docker-base.yml
+docker-base*.yml
 
 # Environment variables
 .env
