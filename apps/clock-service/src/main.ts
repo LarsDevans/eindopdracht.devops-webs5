@@ -1,12 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { ClockServiceModule } from './clock-service.module';
-import { MicroserviceOptions } from '@nestjs/microservices';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app =
-    await NestFactory.createMicroservice<MicroserviceOptions>(
-      ClockServiceModule,
-    );
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    ClockServiceModule,
+    {
+      transport: Transport.RMQ,
+      options: {
+        urls: [`${process.env.RABBITMQ_URI}:${process.env.RABBITMQ_PORT}`],
+        queue: `${process.env.RABBITMQ_CLOCK_QUEUE}`,
+        noAck: false,
+      },
+    },
+  );
   await app.listen();
 }
 bootstrap();
