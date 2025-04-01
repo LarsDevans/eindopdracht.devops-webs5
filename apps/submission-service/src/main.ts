@@ -12,8 +12,6 @@ async function bootstrap() {
   const queues = [
     process.env.RABBITMQ_RIVAL_CREATED_QUEUE,
     process.env.RABBITMQ_RIVAL_REVOKED_QUEUE,
-    process.env.RABBITMQ_RIVAL_GRADED_QUEUE,
-    process.env.RABBITMQ_RIVAL_GRADE_FAILED_QUEUE,
     process.env.RABBITMQ_RIVAL_UPLOAD_FAILED_QUEUE,
   ];
 

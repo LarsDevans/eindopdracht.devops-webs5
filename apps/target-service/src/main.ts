@@ -10,9 +10,7 @@ async function bootstrap() {
 
   const queues = [
     process.env.RABBITMQ_TARGET_CREATED_QUEUE,
-    process.env.RABBITMQ_TARGET_COMPLETED_QUEUE,
     process.env.RABBITMQ_TARGET_REVOKED_QUEUE,
-    process.env.RABBITMQ_TARGET_TTL_RIVALS_QUEUE,
   ];
 
   queues.forEach((queue) => {
