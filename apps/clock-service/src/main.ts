@@ -8,9 +8,7 @@ async function bootstrap() {
   const app =
     await NestFactory.create<NestExpressApplication>(ClockServiceModule);
 
-  const queues = [
-    process.env.RABBITMQ_TARGET_COMPLETED_QUEUE,
-  ];
+  const queues = [process.env.RABBITMQ_TARGET_COMPLETED_QUEUE];
 
   queues.forEach((queue) => {
     app.connectMicroservice({
