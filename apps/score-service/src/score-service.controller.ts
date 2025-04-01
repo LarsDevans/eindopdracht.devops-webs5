@@ -1,9 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { ScoreServiceService } from './score-service.service';
-import { ApiBasicAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBasicAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller()
-@ApiTags("Score")
+@ApiTags('Score')
 @ApiBasicAuth()
 export class ScoreServiceController {
   constructor(private readonly scoreServiceService: ScoreServiceService) {}
@@ -14,8 +19,8 @@ export class ScoreServiceController {
     description: 'Returns hello',
   })
   @ApiOperation({
-    summary: "Hello",
-    description: "Returns hello",
+    summary: 'Hello',
+    description: 'Returns hello',
   })
   getHello(): string {
     return this.scoreServiceService.getHello();

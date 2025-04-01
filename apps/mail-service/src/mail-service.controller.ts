@@ -1,9 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { MailServiceService } from './mail-service.service';
-import { ApiBasicAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBasicAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller()
-@ApiTags("Mail")
+@ApiTags('Mail')
 @ApiBasicAuth()
 export class MailServiceController {
   constructor(private readonly mailServiceService: MailServiceService) {}
@@ -14,8 +19,8 @@ export class MailServiceController {
     description: 'Returns hello',
   })
   @ApiOperation({
-    summary: "Hello",
-    description: "Returns hello",
+    summary: 'Hello',
+    description: 'Returns hello',
   })
   getHello(): string {
     return this.mailServiceService.getHello();
