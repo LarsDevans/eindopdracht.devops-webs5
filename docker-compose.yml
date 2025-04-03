@@ -16,6 +16,8 @@ services:
     extends:
       file: ${DOCKER_BASE_FILE:-docker-base.yml}
       service: base-service
+    ports:
+      - '${CLOCK_SERVICE_PORT}:3000'
 
   mail-service:
     build:
@@ -26,6 +28,8 @@ services:
     extends:
       file: ${DOCKER_BASE_FILE:-docker-base.yml}
       service: base-service
+    ports:
+      - '${MAIL_SERVICE_PORT}:3000'
 
   mysql-service:
     environment:
@@ -60,6 +64,8 @@ services:
     extends:
       file: ${DOCKER_BASE_FILE:-docker-base.yml}
       service: base-service
+    ports:
+      - '${SCORE_SERVICE_PORT}:3000'
 
   submission-service:
     build:
@@ -70,6 +76,8 @@ services:
     extends:
       file: ${DOCKER_BASE_FILE:-docker-base.yml}
       service: base-service
+    ports:
+      - '${SUBMISSION_SERVICE_PORT}:3000'
 
   target-service:
     build:
@@ -80,6 +88,8 @@ services:
     extends:
       file: ${DOCKER_BASE_FILE:-docker-base.yml}
       service: base-service
+    ports:
+      - '${TARGET_SERVICE_PORT}:3000'
 
 networks:
   snapnet:
