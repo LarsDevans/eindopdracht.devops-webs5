@@ -1,15 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
 import { SubmissionServiceService } from './submission-service.service';
 import {
-  ApiBasicAuth,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('submission')
 @Controller()
-@ApiTags('Submission')
-@ApiBasicAuth()
 export class SubmissionServiceController {
   constructor(
     private readonly submissionServiceService: SubmissionServiceService,

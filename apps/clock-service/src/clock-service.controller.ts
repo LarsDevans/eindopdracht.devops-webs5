@@ -1,15 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
 import { ClockServiceService } from './clock-service.service';
 import {
-  ApiBasicAuth,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('clock')
 @Controller()
-@ApiTags('Clock')
-@ApiBasicAuth()
 export class ClockServiceController {
   constructor(private readonly clockServiceService: ClockServiceService) {}
 

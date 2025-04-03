@@ -1,15 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
 import { TargetServiceService } from './target-service.service';
 import {
-  ApiBasicAuth,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('target')
 @Controller()
-@ApiTags('Target')
-@ApiBasicAuth()
 export class TargetServiceController {
   constructor(private readonly targetServiceService: TargetServiceService) {}
 

@@ -10,10 +10,12 @@ async function bootstrap() {
   // Swagger / OA docs
   const config = new DocumentBuilder()
     .setTitle('Mail Service')
-    .addBasicAuth()
+    .setDescription('The mail service API description')
+    .setVersion('1.0')
+    .addTag('mail')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger-ui', app, document);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.port ?? 3000);
 }
