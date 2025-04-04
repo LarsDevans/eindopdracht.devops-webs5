@@ -28,6 +28,7 @@ Checkout `package.json` for all available NPM command.
 3. Open the project's terminal and run the following command:
 
 ```bash
+$ npm install
 $ docker compose build
 $ docker compose up # Optional: add the -d flag to detach the terminal
 ```
