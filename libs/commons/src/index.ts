@@ -1,2 +1,1 @@
-export * from './commons.module';
-export * from './commons.service';
+export * as Rmq from './rmq';
