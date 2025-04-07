@@ -19,6 +19,15 @@
         "tsConfigPath": "apps/clock-service/tsconfig.app.json"
       }
     },
+    "commons": {
+      "type": "library",
+      "root": "libs/commons",
+      "entryFile": "index",
+      "sourceRoot": "libs/commons/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/commons/tsconfig.lib.json"
+      }
+    },
     "mail-service": {
       "type": "application",
       "root": "apps/mail-service",
