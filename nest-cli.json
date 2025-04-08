@@ -19,13 +19,13 @@
         "tsConfigPath": "apps/clock-service/tsconfig.app.json"
       }
     },
-    "commons": {
+    "rmq": {
       "type": "library",
-      "root": "libs/commons",
+      "root": "libs/rmq",
       "entryFile": "index",
-      "sourceRoot": "libs/commons/src",
+      "sourceRoot": "libs/rmq/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/commons/tsconfig.lib.json"
+        "tsConfigPath": "libs/rmq/tsconfig.lib.json"
       }
     },
     "mail-service": {

@@ -80,7 +80,7 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/commons(|/.*)$": "<rootDir>/libs/commons/src/$1"
+      "^@app/rmq(|/.*)$": "<rootDir>/libs/rmq/src/$1"
     }
   }
 }

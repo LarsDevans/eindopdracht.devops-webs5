@@ -18,11 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/commons": [
-        "libs/commons/src"
+      "@app/rmq": [
+        "libs/rmq/src"
       ],
-      "@app/commons/*": [
-        "libs/commons/src/*"
+      "@app/rmq/*": [
+        "libs/rmq/src/*"
       ]
     }
   }
