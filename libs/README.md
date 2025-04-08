@@ -1,4 +1,4 @@
-# Librarys for NestJS
+# Libraries for NestJS
 This repository contains a collection of libraries designed to enhance the development experience with NestJS. The libraries are organized into different modules, each serving a specific purpose.
 
 ## Available Libraries
