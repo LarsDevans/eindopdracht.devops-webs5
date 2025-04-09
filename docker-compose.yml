@@ -1,12 +1,4 @@
 services:
-  rabbitmq-service:
-    image: rabbitmq:4-management-alpine
-    ports:
-      - '${RMQ_PORT}:5672'
-      - '${RMQ_DASHBOARD_PORT}:15672'
-    networks:
-      - snapnet
-
   clock-service:
     build:
       args:

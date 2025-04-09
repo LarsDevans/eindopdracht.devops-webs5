@@ -3,7 +3,6 @@ services:
     build:
       context: .
     depends_on:
-      - rabbitmq-service
       - mysql-service
     environment:
       - DB_HOST=http://mysql-service
