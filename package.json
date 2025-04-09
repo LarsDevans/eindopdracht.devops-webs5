@@ -77,6 +77,9 @@
     "roots": [
       "<rootDir>/apps/",
       "<rootDir>/libs/"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@app/kafka(|/.*)$": "<rootDir>/libs/kafka/src/$1"
+    }
   }
 }
