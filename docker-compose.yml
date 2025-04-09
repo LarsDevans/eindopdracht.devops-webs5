@@ -1,4 +1,34 @@
 services:
+  mysql-service:
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    image: mysql:9
+    networks:
+      - snapnet
+    ports:
+      - '${MYSQL_PORT}:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+
+  kafka-ui-service:
+    depends_on:
+      - kafka-service
+    image: provectuslabs/kafka-ui:latest
+    networks:
+      - snapnet
+    ports:
+      - '${KAFKA_UI_PORT}:8080'
+
+  kafka-service:
+    image: apache/kafka:4.0.0
+    networks:
+      - snapnet
+    ports:
+      - '${KAFKA_PORT}:9092'
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
   clock-service:
     build:
       args:
@@ -22,18 +52,6 @@ services:
       service: base-service
     ports:
       - '${MAIL_SERVICE_PORT}:3000'
-
-  mysql-service:
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    image: mysql:9
-    networks:
-      - snapnet
-    ports:
-      - '${MYSQL_PORT}:3306'
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
 
   read-service:
     build:
@@ -89,3 +107,4 @@ networks:
 
 volumes:
   mysql_data:
+  kafka_data:

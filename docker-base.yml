@@ -4,11 +4,12 @@ services:
       context: .
     depends_on:
       - mysql-service
+      - kafka-service
     environment:
+      - NODE_ENV=${NODE_ENV}
       - DB_HOST=http://mysql-service
       - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - DB_PORT=${MYSQL_PORT}
       - DB_USER=${MYSQL_ROOT_USER}
-      - NODE_ENV=${NODE_ENV}
     networks:
       - snapnet
