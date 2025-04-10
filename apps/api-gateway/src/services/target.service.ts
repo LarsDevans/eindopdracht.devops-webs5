@@ -23,7 +23,7 @@ export class TargetService {
       console.log('Response:', result.data);
       return result.data;
     } catch (error) {
-      console.error('Error during testConnection:', error.message);
+      return `Error: ${error.message}`;
     }
   }
 }

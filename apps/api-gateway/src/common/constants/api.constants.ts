@@ -1,2 +1,2 @@
-export const TARGET_SERVICE_URL = `${process.env.SERVICE_TARGET_SERVICE}:${process.env.TARGET_SERVICE_PORT}`;
-export const SUBMISSION_SERVICE_URL = `${process.env.SERVICE_SUBMISSION_SERVICE}:${process.env.SUBMISSION_SERVICE_PORT}`;
+export const TARGET_SERVICE_URL = `http://${process.env.SERVICE_TARGET_SERVICE}:3000`;
+export const SUBMISSION_SERVICE_URL = `http://${process.env.SERVICE_SUBMISSION_SERVICE}:3000`;
