@@ -51,7 +51,7 @@ async function bootstrap() {
 ```json
 {
   "value": {
-    "message": "Kafka is better",
+    "message": "Kafka is better"
   }
 }
 ```
