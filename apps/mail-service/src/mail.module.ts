@@ -15,6 +15,7 @@ import { UsersModule } from './users/users.module';
       username: process.env.MYSQL_ROOT_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_MAIL_DB,
+      autoLoadEntities: true,
     }),
     KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
