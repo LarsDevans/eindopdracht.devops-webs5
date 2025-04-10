@@ -127,6 +127,16 @@ services:
     ports:
       - '${TARGET_SERVICE_PORT}:3000'
 
+  api-gateway:
+    build:
+      args:
+        SERVICE: ${SERVICE_API_GATEWAY}
+    extends:
+      file: ${DOCKER_BASE_FILE:-docker-base.yml}
+      service: base-service
+    ports:
+      - '${API_GATEWAY_PORT}:3000'
+
 networks:
   snapnet:
     driver: bridge
