@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { AppService } from '../services/app.service';
 import { ApiResponse, ApiOperation } from '@nestjs/swagger';
 
-@Controller('Gateway')
+@Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 

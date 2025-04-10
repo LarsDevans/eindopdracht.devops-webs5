@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
 import { TargetService } from '../services/target.service';
 
-@Controller('Target')
+@Controller('target')
 export class TargetController {
   constructor(private readonly targetService: TargetService) {}
 
   @Get()
-  async testConnection() {
-    return this.targetService.testConnection();
+  async getHello() {
+    return this.targetService.getHello();
   }
 }
