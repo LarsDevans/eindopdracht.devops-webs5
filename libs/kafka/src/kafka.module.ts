@@ -3,16 +3,16 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { KAFKA_BROKERS, KAFKA_CLIENT_NAME } from './kafka.constants';
 import { KafkaSharedOptions } from './kafka.interfaces';
-import { KafkaProducerService } from './kafka.service';
+import { KafkaService } from './kafka.service';
 
 @Global()
 @Module({})
-export class KafkaSharedModule {
+export class KafkaModule {
   static register(options: KafkaSharedOptions): DynamicModule {
     const { groupId } = options;
 
     return {
-      module: KafkaSharedModule,
+      module: KafkaModule,
       imports: [
         ClientsModule.register([
           {
@@ -25,8 +25,8 @@ export class KafkaSharedModule {
           },
         ]),
       ],
-      providers: [KafkaProducerService],
-      exports: [KafkaProducerService, ClientsModule],
+      providers: [KafkaService],
+      exports: [KafkaService, ClientsModule],
     };
   }
 }
