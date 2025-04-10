@@ -18,11 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/rmq": [
-        "libs/rmq/src"
+      "@app/kafka": [
+        "libs/kafka/src"
       ],
-      "@app/rmq/*": [
-        "libs/rmq/src/*"
+      "@app/kafka/*": [
+        "libs/kafka/src/*"
       ]
     }
   }

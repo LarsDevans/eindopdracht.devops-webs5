@@ -1,12 +1,60 @@
 services:
-  rabbitmq-service:
-    image: rabbitmq:4-management-alpine
-    ports:
-      - '${RMQ_PORT}:5672'
-      - '${RMQ_DASHBOARD_PORT}:15672'
+  mysql-service:
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    image: mysql:9
     networks:
       - snapnet
+    ports:
+      - '${MYSQL_PORT}:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
 
+  # Kafka Services (Zookeeper, Kafka, and Kafka UI)
+  zookeeper-service:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
+    image: confluentinc/cp-zookeeper:7.5.0
+    networks:
+      - snapnet
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+
+  kafka-service:
+    depends_on:
+      - zookeeper-service
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ${SERVICE_ZOOKEEPER_SERVICE}:${ZOOKEEPER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${SERVICE_KAFKA_SERVICE}:${KAFKA_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_LISTENER_NAME_INTERNAL_LISTENER: INTERNAL
+      KAFKA_LISTENER_PORT_INTERNAL_LISTENER: ${KAFKA_INTERNAL_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_INTERNAL_LISTENER: PLAINTEXT
+      KAFKA_LISTENER_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    image: confluentinc/cp-kafka:7.5.0
+    networks:
+      - snapnet
+    ports:
+      - '${KAFKA_PORT}:9092'
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
+  kafka-ui-service:
+    depends_on:
+      - kafka-service
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=${SERVICE_KAFKA_SERVICE}:${KAFKA_PORT}
+    image: provectuslabs/kafka-ui:latest
+    networks:
+      - snapnet
+    ports:
+      - '${KAFKA_UI_PORT}:8080'
+
+  # Application Services (Clock, Mail, Read, Score, Submission, and Target)
   clock-service:
     build:
       args:
@@ -30,18 +78,6 @@ services:
       service: base-service
     ports:
       - '${MAIL_SERVICE_PORT}:3000'
-
-  mysql-service:
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    image: mysql:9
-    networks:
-      - snapnet
-    ports:
-      - '${MYSQL_PORT}:3306'
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
 
   read-service:
     build:
@@ -97,3 +133,5 @@ networks:
 
 volumes:
   mysql_data:
+  zookeeper_data:
+  kafka_data:
