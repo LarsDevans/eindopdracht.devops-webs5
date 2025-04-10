@@ -1,10 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiGatewayService } from './api-gateway.service';
+import { AppService } from '../services/app.service';
 import { ApiResponse, ApiOperation } from '@nestjs/swagger';
 
-@Controller()
-export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService) {}
+@Controller('Gateway')
+export class AppController {
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   @ApiResponse({
@@ -16,6 +16,6 @@ export class ApiGatewayController {
     description: 'Returns hello',
   })
   getHello(): string {
-    return this.apiGatewayService.getHello();
+    return this.appService.getHello();
   }
 }

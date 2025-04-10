@@ -9,10 +9,10 @@ async function bootstrap() {
 
   // Swagger / OA docs
   const config = new DocumentBuilder()
-    .setTitle('Clock Service')
-    .setDescription('The clock service API description')
+    .setTitle('Target Service')
+    .setDescription('The target service API description')
     .setVersion('1.0')
-    .addTag('clock')
+    .addTag('target')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

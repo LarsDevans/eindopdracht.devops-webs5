@@ -1,11 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { ApiGatewayModule } from './api-gateway.module';
+import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app =
-    await NestFactory.create<NestExpressApplication>(ApiGatewayModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Swagger / OA docs
   const config = new DocumentBuilder()
