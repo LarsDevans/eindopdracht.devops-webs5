@@ -11,17 +11,30 @@ services:
       - mysql_data:/var/lib/mysql
       - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
 
-  kafka-ui-service:
-    depends_on:
-      - kafka-service
-    image: provectuslabs/kafka-ui:latest
+  # Kafka Services (Zookeeper, Kafka, and Kafka UI)
+  zookeeper-service:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
+    image: confluentinc/cp-zookeeper:7.5.0
     networks:
       - snapnet
-    ports:
-      - '${KAFKA_UI_PORT}:8080'
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
 
   kafka-service:
-    image: apache/kafka:4.0.0
+    depends_on:
+      - zookeeper-service
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ${SERVICE_ZOOKEEPER_SERVICE}:${ZOOKEEPER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${SERVICE_KAFKA_SERVICE}:${KAFKA_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_LISTENER_NAME_INTERNAL_LISTENER: INTERNAL
+      KAFKA_LISTENER_PORT_INTERNAL_LISTENER: ${KAFKA_INTERNAL_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_INTERNAL_LISTENER: PLAINTEXT
+      KAFKA_LISTENER_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    image: confluentinc/cp-kafka:7.5.0
     networks:
       - snapnet
     ports:
@@ -29,6 +42,19 @@ services:
     volumes:
       - kafka_data:/var/lib/kafka/data
 
+  kafka-ui-service:
+    depends_on:
+      - kafka-service
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=${SERVICE_KAFKA_SERVICE}:${KAFKA_PORT}
+    image: provectuslabs/kafka-ui:latest
+    networks:
+      - snapnet
+    ports:
+      - '${KAFKA_UI_PORT}:8080'
+
+  # Application Services (Clock, Mail, Read, Score, Submission, and Target)
   clock-service:
     build:
       args:
@@ -107,4 +133,5 @@ networks:
 
 volumes:
   mysql_data:
+  zookeeper_data:
   kafka_data:
