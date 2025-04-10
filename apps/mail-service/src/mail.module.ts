@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MailServiceController } from './mail-service.controller';
-import { MailServiceService } from './mail-service.service';
+import { MailController } from './mail.controller';
+import { MailService } from './mail.service';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { MailServiceService } from './mail-service.service';
       database: process.env.MYSQL_MAIL_DB,
     }),
   ],
-  controllers: [MailServiceController],
-  providers: [MailServiceService],
+  controllers: [MailController],
+  providers: [MailService],
 })
-export class MailServiceModule {}
+export class MailModule {}

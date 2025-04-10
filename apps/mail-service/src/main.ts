@@ -1,11 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { MailServiceModule } from './mail-service.module';
+import { MailModule } from './mail.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app =
-    await NestFactory.create<NestExpressApplication>(MailServiceModule);
+  const app = await NestFactory.create<NestExpressApplication>(MailModule);
 
   // Swagger / OA docs
   const config = new DocumentBuilder()

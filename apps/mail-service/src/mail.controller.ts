@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { MailServiceService } from './mail-service.service';
+import { MailService } from './mail.service';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -10,8 +10,8 @@ import {
 @ApiBearerAuth()
 @ApiTags('mail')
 @Controller()
-export class MailServiceController {
-  constructor(private readonly mailServiceService: MailServiceService) {}
+export class MailController {
+  constructor(private readonly mailService: MailService) {}
 
   @Get()
   @ApiResponse({
@@ -23,6 +23,6 @@ export class MailServiceController {
     description: 'Returns hello',
   })
   getHello(): string {
-    return this.mailServiceService.getHello();
+    return this.mailService.getHello();
   }
 }
