@@ -1,7 +1,9 @@
+import { attachKafka } from '@app/kafka';
 import { NestFactory } from '@nestjs/core';
-import { MailModule } from './mail.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+import { MailModule } from './mail.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(MailModule);
@@ -17,5 +19,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.port ?? 3000);
+  await attachKafka(app, 'mail-consumer');
 }
 bootstrap();

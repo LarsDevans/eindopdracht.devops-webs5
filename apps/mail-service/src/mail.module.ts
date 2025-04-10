@@ -1,3 +1,4 @@
+import { KafkaModule } from '@app/kafka';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -15,6 +16,7 @@ import { UsersModule } from './users/users.module';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_MAIL_DB,
     }),
+    KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
   ],
   controllers: [MailController],
