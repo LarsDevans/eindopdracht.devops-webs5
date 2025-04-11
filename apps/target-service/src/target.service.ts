@@ -27,4 +27,17 @@ export class TargetService {
       data: target,
     };
   }
+
+  async findAllByCoordinates(lat: string, lon: string): Promise<ActionResult> {
+    const targets = await this.targetRepository.findBy({
+      nearbyLatitude: lat,
+      nearbyLongitude: lon,
+    });
+    return { success: true, reason: 'All targets found.', data: targets };
+  }
+
+  async findAll(): Promise<ActionResult> {
+    const targets = await this.targetRepository.find();
+    return { success: true, reason: 'All targets found.', data: targets };
+  }
 }

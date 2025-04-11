@@ -20,7 +20,7 @@ export class CreateTargetDto {
   @IsString()
   @ApiProperty({
     description: 'Latitude near the target location',
-    example: '40.4447° N',
+    example: '40.4447 N',
   })
   nearbyLatitude: string;
 
@@ -28,7 +28,7 @@ export class CreateTargetDto {
   @IsString()
   @ApiProperty({
     description: 'Longitude near the target location',
-    example: '3.9525° W',
+    example: '3.9525 W',
   })
   nearbyLongitude: string;
 
