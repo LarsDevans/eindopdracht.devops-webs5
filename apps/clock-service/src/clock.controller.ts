@@ -1,11 +1,9 @@
 import { TopicPayload } from '@app/types';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { ApiTags } from '@nestjs/swagger';
 
 import { ClockService } from './clock.service';
 
-@ApiTags('Clock Controller')
 @Controller()
 export class ClockController {
   constructor(private readonly clockService: ClockService) {}
