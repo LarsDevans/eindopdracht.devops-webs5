@@ -44,9 +44,8 @@ export class TargetController {
 
   @Get()
   @ApiOperation({
-    summary: 'Create a new target',
-    description:
-      'Creates a new target with provided data. All fields are required.',
+    summary: 'Find a target',
+    description: 'Finds a target with provided data. All fields are optional.',
   })
   @ApiQuery({
     description: 'Latitude coordinate',
