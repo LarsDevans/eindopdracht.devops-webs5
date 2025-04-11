@@ -1,8 +1,9 @@
+import { KafkaModule } from '@app/kafka';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MailServiceController } from './mail-service.controller';
-import { MailServiceService } from './mail-service.service';
+import { MailService } from './mail.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -13,9 +14,11 @@ import { MailServiceService } from './mail-service.service';
       username: process.env.MYSQL_ROOT_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_MAIL_DB,
+      autoLoadEntities: true,
     }),
+    KafkaModule.register({ groupId: 'mail-consumer' }),
+    UsersModule,
   ],
-  controllers: [MailServiceController],
-  providers: [MailServiceService],
+  providers: [MailService],
 })
-export class MailServiceModule {}
+export class MailModule {}
