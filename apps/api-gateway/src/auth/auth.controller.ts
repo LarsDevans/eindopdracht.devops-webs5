@@ -18,4 +18,14 @@ export class AuthController {
   async register(@Body() registerDto: RegisterDto) {
     return await this.authService.register(registerDto);
   }
+
+  @Public()
+  @Post('login')
+  @ApiBody({ type: RegisterDto })
+  @ApiOperation({ summary: 'Login a user' })
+  @ApiResponse({ status: 200, description: 'User successfully logged in' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  async login(@Body() loginDto: RegisterDto) {
+    return await this.authService.login(loginDto);
+  }
 }
