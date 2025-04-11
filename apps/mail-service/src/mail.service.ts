@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
 
 import { getWelcomeTemplate } from './templates/welcome.template';
+import { getTargetCreatedTemplate } from './templates/target-created.template';
 
 @Injectable()
 export class MailService {
   dispatchWelcomeEmail(email: string) {
     const { subject, body } = getWelcomeTemplate();
+    this.dispatch([email], subject, body);
+  }
+
+  dispatchTargetCreatedEmail(email: string, targetUuid: string) {
+    const { subject, body } = getTargetCreatedTemplate(targetUuid);
     this.dispatch([email], subject, body);
   }
 

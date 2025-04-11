@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { MailService } from './mail.service';
 import { UsersModule } from './users/users.module';
+import { TargetsController } from './targets/targets.controller';
+import { TargetsModule } from './targets/targets.module';
 
 @Module({
   imports: [
@@ -18,7 +20,9 @@ import { UsersModule } from './users/users.module';
     }),
     KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
+    TargetsModule,
   ],
   providers: [MailService],
+  controllers: [TargetsController],
 })
 export class MailModule {}

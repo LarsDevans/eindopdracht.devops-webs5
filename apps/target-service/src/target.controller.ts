@@ -50,7 +50,11 @@ export class TargetController {
 
     const result = await this.targetService.create(createTargetDto);
     if (result.success) {
-      this.kafkaService.emit('target.create', result.data);
+      this.kafkaService.emit('target.created', {
+        topic: 'target.create',
+        timestamp: Date(),
+        data: result.data,
+      });
     }
 
     return { message: 'Target created successfully', data: result.data };
