@@ -3,19 +3,18 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
 import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
-import { DataSource, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { KafkaService } from '@app/kafka';
 import { TopicPayload } from '@app/types';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly dataSource: DataSource,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     private readonly kafkaService: KafkaService,
+    private readonly userService: UserService,
   ) {}
 
   async register(registerDto: UserDto): Promise<{ token: string }> {
@@ -46,7 +45,7 @@ export class AuthService {
       });
       await queryRunner.manager.save(user);
 
-      const payload = { sub: user.id, username: user.email };
+      const payload = { sub: user.id, email: user.email };
       const token = await this.jwtService.signAsync(payload);
 
       await queryRunner.commitTransaction();
@@ -74,7 +73,7 @@ export class AuthService {
   async login(loginDto: UserDto): Promise<{ token: string }> {
     const { email, password } = loginDto;
 
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userService.findOneByEmail(email);
     if (!user) {
       throw new ConflictException({
         success: false,
@@ -92,7 +91,7 @@ export class AuthService {
       });
     }
 
-    const payload = { sub: user.id, username: user.email };
+    const payload = { sub: user.id, email: user.email };
     const token = await this.jwtService.signAsync(payload);
 
     return { token };

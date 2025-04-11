@@ -4,9 +4,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './auth.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { AuthController } from './auth.controller';
+import { UserModule } from './user.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { AuthController } from './auth.controller';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]),
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [JwtStrategy, AuthService],

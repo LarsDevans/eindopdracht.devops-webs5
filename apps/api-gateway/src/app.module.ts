@@ -10,6 +10,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/auth.guard';
 import { HttpRequestService } from './services/http-request.service';
 import { KafkaModule } from '@app/kafka';
+import { UserModule } from './auth/user.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { KafkaModule } from '@app/kafka';
     }),
     HttpModule,
     AuthModule,
+    UserModule,
     KafkaModule.register({ groupId: 'gateway-consumer' }),
   ],
   controllers: [AppController, TargetController],
@@ -28,7 +30,7 @@ import { KafkaModule } from '@app/kafka';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    }, // TODO: CHECK OF DE GEBRUIKER IN DE DATABASE STAAT
+    },
   ],
 })
 export class AppModule {}

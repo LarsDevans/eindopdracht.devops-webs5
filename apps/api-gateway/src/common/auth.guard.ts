@@ -8,12 +8,14 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './public';
 import { Reflector } from '@nestjs/core';
+import { UserService } from '../auth/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
+    private userService: UserService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -37,6 +39,16 @@ export class AuthGuard implements CanActivate {
       console.error('JWT verification error:', e);
       throw new UnauthorizedException();
     }
+
+    const user = await this.userService.findOneByEmailAndId(
+      request['user'].email,
+      request['user'].sub,
+    );
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
     return true;
   }
 
