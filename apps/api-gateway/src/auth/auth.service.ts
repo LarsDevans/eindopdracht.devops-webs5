@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
 import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryRunner } from 'typeorm';
 import { KafkaService } from '@app/kafka';
 import { TopicPayload } from '@app/types';
 import { UserService } from './user.service';
@@ -19,50 +19,16 @@ export class AuthService {
 
   async register(registerDto: UserDto): Promise<{ token: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+    await this.startTransaction(queryRunner);
 
     try {
-      const { email, password } = registerDto;
-
-      const existingUser = await queryRunner.manager.findOne(User, {
-        where: { email },
-      });
-      if (existingUser) {
-        throw new ConflictException({
-          success: false,
-          reason: 'Email is already in use.',
-          data: existingUser,
-        });
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const user = queryRunner.manager.create(User, {
-        email,
-        password: hashedPassword,
-      });
-      await queryRunner.manager.save(user);
-
-      const payload = { sub: user.id, email: user.email };
-      const token = await this.jwtService.signAsync(payload);
-
-      await queryRunner.commitTransaction();
-
-      const kafkaPayload: TopicPayload = {
-        topic: 'user.created',
-        timestamp: Date(),
-        data: {
-          uuid: user.id,
-          email: user.email,
-        },
-      };
-      this.kafkaService.emit('user.created', kafkaPayload);
-
+      const user = await this.createUser(registerDto, queryRunner);
+      const token = await this.generateToken(user);
+      await this.commitTransaction(queryRunner);
+      this.emitUserCreatedEvent(user);
       return { token };
     } catch (error) {
-      await queryRunner.rollbackTransaction();
+      await this.rollbackTransaction(queryRunner);
       console.error('Error registering user:', error);
       throw error;
     } finally {
@@ -71,29 +37,77 @@ export class AuthService {
   }
 
   async login(loginDto: UserDto): Promise<{ token: string }> {
-    const { email, password } = loginDto;
-
-    const user = await this.userService.findOneByEmail(email);
-    if (!user) {
-      throw new ConflictException({
-        success: false,
-        reason: 'Invalid credentials.',
-        data: null,
-      });
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new ConflictException({
-        success: false,
-        reason: 'Invalid credentials.',
-        data: null,
-      });
-    }
-
-    const payload = { sub: user.id, email: user.email };
-    const token = await this.jwtService.signAsync(payload);
-
+    const user = await this.validateUser(loginDto);
+    const token = await this.generateToken(user);
     return { token };
+  }
+
+  private async startTransaction(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+  }
+
+  private async commitTransaction(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.commitTransaction();
+  }
+
+  private async rollbackTransaction(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.rollbackTransaction();
+  }
+
+  private async createUser(
+    registerDto: UserDto,
+    queryRunner: QueryRunner,
+  ): Promise<User> {
+    const { email, password } = registerDto;
+
+    const existingUser = await this.userService.findOneByEmail(email);
+    if (existingUser) {
+      throw new ConflictException({
+        success: false,
+        reason: 'Email is already in use.',
+        data: existingUser,
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = queryRunner.manager.create(User, {
+      email,
+      password: hashedPassword,
+    });
+    return queryRunner.manager.save(user);
+  }
+
+  private async validateUser({ email, password }: UserDto): Promise<User> {
+    const user = await this.userService.findOneByEmail(email);
+
+    const isInvalid = !user || !(await bcrypt.compare(password, user.password));
+    if (isInvalid) {
+      throw new ConflictException({
+        success: false,
+        reason: 'Invalid credentials.',
+        data: null,
+      });
+    }
+
+    return user;
+  }
+
+  private async generateToken(user: User): Promise<string> {
+    const payload = { sub: user.id, email: user.email };
+    return this.jwtService.signAsync(payload);
+  }
+
+  private emitUserCreatedEvent(user: User): void {
+    const kafkaPayload: TopicPayload = {
+      topic: 'user.created',
+      timestamp: new Date().toISOString(),
+      data: {
+        uuid: user.id,
+        email: user.email,
+      },
+    };
+
+    this.kafkaService.emit('user.created', kafkaPayload);
   }
 }
