@@ -1,28 +1,26 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { ClockService } from './clock.service';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
+import { TopicPayload } from '@app/types';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @ApiBearerAuth()
-@ApiTags('clock')
+@ApiTags('Clock Controller')
 @Controller()
 export class ClockController {
-  constructor(private readonly clockService: ClockService) {}
+  constructor(
+    private readonly clockService: ClockService,
+    @Inject(KAFKA_CLIENT_NAME) private readonly kafkaService: KafkaService,
+  ) {}
 
-  @Get()
-  @ApiResponse({
-    status: 200,
-    description: 'Returns hello',
-  })
-  @ApiOperation({
-    summary: 'Hello',
-    description: 'Returns hello',
-  })
-  getHello(): string {
-    return this.clockService.getHello();
+  @MessagePattern('target.created')
+  async create(@Payload() topicPayload: TopicPayload) {
+    const { uuid, durationHours } = topicPayload.data;
+    const result = await this.clockService.create({
+      targetUuid: uuid,
+      durationHours,
+    });
+    console.log(result);
   }
 }
