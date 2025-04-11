@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Target } from './entities/target.entity';
-import { CreateTargetDto } from './dto/create-target.dto';
+import { CreateTargetDto } from '@app/types';
 
 @Injectable()
 export class TargetService {

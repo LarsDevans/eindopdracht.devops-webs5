@@ -8,7 +8,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { CreateTargetDto } from './dto/create-target.dto';
+import { CreateTargetDto } from '@app/types';
 import { TargetService } from './target.service';
 
 @ApiTags('Target Controller')

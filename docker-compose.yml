@@ -54,7 +54,7 @@ services:
     ports:
       - '${KAFKA_UI_PORT}:8080'
 
-  # Application Services (Clock, Mail, Read, Score, Submission, and Target)
+  # Application Services (Clock, Mail, Read, Score, Submission, Target and API Gateway)
   clock-service:
     build:
       args:
@@ -126,6 +126,18 @@ services:
       service: base-service
     ports:
       - '${TARGET_SERVICE_PORT}:3000'
+
+  api-gateway:
+    build:
+      args:
+        SERVICE: ${SERVICE_API_GATEWAY}
+    environment:
+      - DB_NAME=${MYSQL_AUTH_DB}
+    extends:
+      file: ${DOCKER_BASE_FILE:-docker-base.yml}
+      service: base-service
+    ports:
+      - '${API_GATEWAY_PORT}:3000'
 
 networks:
   snapnet:
