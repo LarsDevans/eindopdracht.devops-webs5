@@ -1,30 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import { TARGET_SERVICE_URL } from '../common/api.constants';
-import { handleHttpRequest } from '../common/http-request.util';
+import { HttpRequestService } from './http-request.service';
 import { generateOpaqueToken } from '../common/jwt.util';
 import { CreateTargetDto } from '@app/types';
 
 @Injectable()
 export class TargetService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpRequestService: HttpRequestService) {}
 
   async create(createTargetDto: CreateTargetDto): Promise<string> {
     try {
-      const result = await handleHttpRequest(
-        this.httpService.post<string>(
-          `${TARGET_SERVICE_URL}`,
-          createTargetDto,
-          {
-            headers: {
-              Authorization: `Bearer ${generateOpaqueToken('target')}`,
-            },
-          },
-        ),
-        'create target',
+      const headers = {
+        Authorization: `Bearer ${generateOpaqueToken('target')}`,
+      };
+
+      const result = await this.httpRequestService.sendRequest<string>(
+        'POST',
+        `${TARGET_SERVICE_URL}`,
+        createTargetDto,
+        headers,
       );
 
-      return result.data;
+      return result;
     } catch (error) {
       console.error('Error creating target:', error);
       return error.message;

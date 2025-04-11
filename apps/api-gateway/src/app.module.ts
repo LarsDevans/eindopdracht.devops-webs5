@@ -8,6 +8,8 @@ import { HttpModule } from '@nestjs/axios';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/auth.guard';
+import { HttpRequestService } from './services/http-request.service';
+import { KafkaModule } from '@app/kafka';
 
 @Module({
   imports: [
@@ -16,11 +18,13 @@ import { AuthGuard } from './common/auth.guard';
     }),
     HttpModule,
     AuthModule,
+    KafkaModule.register({ groupId: 'gateway-consumer' }),
   ],
   controllers: [AppController, TargetController],
   providers: [
     AppService,
     TargetService,
+    HttpRequestService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

@@ -5,6 +5,8 @@ import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { KafkaService } from '@app/kafka';
+import { TopicPayload } from '@app/types';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +15,7 @@ export class AuthService {
     private readonly dataSource: DataSource,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly kafkaService: KafkaService,
   ) {}
 
   async register(registerDto: UserDto): Promise<{ token: string }> {
@@ -47,6 +50,16 @@ export class AuthService {
       const token = await this.jwtService.signAsync(payload);
 
       await queryRunner.commitTransaction();
+
+      const kafkaPayload: TopicPayload = {
+        topic: 'user.created',
+        timestamp: Date(),
+        data: {
+          uuid: user.id,
+          email: user.email,
+        },
+      };
+      this.kafkaService.emit('user.created', kafkaPayload);
 
       return { token };
     } catch (error) {
