@@ -15,7 +15,6 @@ async function bootstrap() {
     .setTitle('Gateway')
     .setDescription('The Gateway service API description')
     .setVersion('1.0')
-    .addTag('gateway')
     .addBearerAuth(
       {
         type: 'http',

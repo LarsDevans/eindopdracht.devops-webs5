@@ -1,12 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './entities/user.entity';
+import { User } from '../user/user.entity';
 import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { DataSource, QueryRunner } from 'typeorm';
 import { KafkaService } from '@app/kafka';
 import { TopicPayload } from '@app/types';
-import { UserService } from './user.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {

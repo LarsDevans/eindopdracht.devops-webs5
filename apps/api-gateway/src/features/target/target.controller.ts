@@ -1,20 +1,22 @@
 import { Body, Controller, Post, Req } from '@nestjs/common';
-import { TargetService } from '../services/target.service';
+import { TargetService } from '../target/target.service';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { CreateTargetDto } from '@app/types';
-import { CreateTargetDto as GatewayCreateTargetDto } from '../dto/create-target.dto';
+import { CreateTargetDto as GatewayCreateTargetDto } from '../target/dto/create-target.dto';
 import * as jwt from 'jsonwebtoken';
 
 @Controller('target')
+@ApiTags('target')
 export class TargetController {
   constructor(private readonly targetService: TargetService) {}
 
-  @Post()
+  @Post('create')
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Create a new target',

@@ -1,9 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from '../services/app.service';
-import { ApiResponse, ApiOperation } from '@nestjs/swagger';
-import { Public } from '../common/public';
+import { AppService } from './app.service';
+import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from './common/decorators/public';
 
 @Controller()
+@ApiTags('gateway')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
