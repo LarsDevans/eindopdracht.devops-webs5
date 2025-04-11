@@ -17,7 +17,7 @@ export class UsersService {
 
     const existingUser = await this.userRepository.findOneBy({ uuid });
     if (existingUser) {
-      console.log(`User ${existingUser.uuid} already exists.`);
+      console.warn(`User ${existingUser.uuid} already exists.`);
       return {
         success: false,
         reason: `User ${existingUser.uuid} already exists.`,
@@ -27,6 +27,7 @@ export class UsersService {
 
     const user = this.userRepository.create(createUserDto);
     await this.userRepository.save(user);
+
     console.log(`User ${user.uuid} successfully created.`);
     return {
       success: true,

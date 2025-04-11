@@ -11,12 +11,12 @@ export class MailService {
 
   dispatch(emailList: string[], subject: string, body: string) {
     console.log(`
-=== FAKE EMAIL SENT ===
-To: ${emailList.join(', ')}
-Subject: ${subject}
-Body:
-${body}
-========================
+  === FAKE EMAIL SENT ===
+  To: ${emailList.join(', ')}
+  Subject: ${subject}
+  Body:
+  ${body}
+  ========================
     `);
   }
 }

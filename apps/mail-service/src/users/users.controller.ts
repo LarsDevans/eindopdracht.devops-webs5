@@ -22,7 +22,6 @@ export class UsersController {
 
     const result = await this.usersService.create({ uuid, email });
     if (result.success) {
-      const { email } = result.data;
       this.mailService.dispatchWelcomeEmail(email);
     }
   }
