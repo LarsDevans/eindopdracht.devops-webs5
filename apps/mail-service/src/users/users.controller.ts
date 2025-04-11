@@ -12,7 +12,7 @@ export class UsersController {
     private readonly mailService: MailService,
   ) {}
 
-  @MessagePattern('user.create')
+  @MessagePattern('user.created')
   async create(@Payload() topicPayload: TopicPayload) {
     const { uuid, email } = topicPayload.data;
 
