@@ -1,5 +1,5 @@
 export interface TopicPayload {
   topic: string;
-  timestamp: Date;
+  timestamp: string;
   data: any;
 }

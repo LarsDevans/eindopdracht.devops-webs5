@@ -35,4 +35,8 @@ export class UsersService {
       data: user,
     };
   }
+
+  async findOne(uuid: string): Promise<User | null> {
+    return await this.userRepository.findOneBy({ uuid });
+  }
 }
