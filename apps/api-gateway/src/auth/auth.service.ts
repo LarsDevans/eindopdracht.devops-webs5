@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
-import { RegisterDto } from './dto/register.dto';
+import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,7 +15,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<{ token: string }> {
+  async register(registerDto: UserDto): Promise<{ token: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -58,7 +58,7 @@ export class AuthService {
     }
   }
 
-  async login(loginDto: RegisterDto): Promise<{ token: string }> {
+  async login(loginDto: UserDto): Promise<{ token: string }> {
     const { email, password } = loginDto;
 
     const user = await this.userRepository.findOne({ where: { email } });
