@@ -1,13 +1,15 @@
+import { KafkaModule } from '@app/kafka';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { ClockController } from './clock.controller';
 import { ClockService } from './clock.service';
-import { KafkaModule } from '@app/kafka';
 import { Clock } from './entities/clock.entity';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'mysql-service',

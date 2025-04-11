@@ -5,6 +5,9 @@ export class Clock {
   @PrimaryColumn()
   targetUuid: string;
 
-  @Column('int')
-  durationHours: number;
+  @Column({ type: 'datetime' })
+  deadlineUtc: Date;
+
+  @Column({ default: false })
+  processed: boolean;
 }

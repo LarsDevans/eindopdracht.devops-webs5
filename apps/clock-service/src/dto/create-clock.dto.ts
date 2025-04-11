@@ -10,9 +10,9 @@ export class CreateClockDto {
   @IsNotEmpty()
   @IsNumber()
   @ApiProperty({
-    description: 'Duration of the target in hours',
-    example: 72,
-    type: 'integer',
+    description: 'Deadline for the target in UTC time',
+    example: '2001-12-19 23:59:59',
+    type: 'string',
   })
-  durationHours: number;
+  deadlineUtc: Date;
 }
