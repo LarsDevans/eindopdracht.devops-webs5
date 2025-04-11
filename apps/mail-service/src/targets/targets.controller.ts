@@ -14,7 +14,16 @@ export class TargetsController {
   @MessagePattern('target.created')
   async create(@Payload() topicPayload: TopicPayload) {
     const { uuid, ownerUuid } = topicPayload.data;
+
+    if (!uuid || !ownerUuid) {
+      return console.error('Incomplete payload:', topicPayload.data);
+    }
+
     const user = await this.usersService.findOne(ownerUuid);
+    if (!user) {
+      return console.error('Invalid user UUID:', ownerUuid);
+    }
+
     this.mailService.dispatchTargetCreatedEmail(user.email, uuid);
   }
 }
