@@ -2,11 +2,15 @@ import { TopicPayload } from '@app/types';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
+import { MailService } from '../mail.service';
 import { UsersService } from './users.service';
 
 @Controller()
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly mailService: MailService,
+  ) {}
 
   @MessagePattern('user.create')
   async create(@Payload() topicPayload: TopicPayload) {
@@ -16,6 +20,10 @@ export class UsersController {
       return console.error('Invalid payload received:', topicPayload);
     }
 
-    await this.usersService.create({ uuid, email });
+    const result = await this.usersService.create({ uuid, email });
+    if (result.success) {
+      const { email } = result.data;
+      this.mailService.dispatchWelcomeEmail(email);
+    }
   }
 }

@@ -2,7 +2,6 @@ import { KafkaModule } from '@app/kafka';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MailController } from './mail.controller';
 import { MailService } from './mail.service';
 import { UsersModule } from './users/users.module';
 
@@ -20,7 +19,6 @@ import { UsersModule } from './users/users.module';
     KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
   ],
-  controllers: [MailController],
   providers: [MailService],
 })
 export class MailModule {}
