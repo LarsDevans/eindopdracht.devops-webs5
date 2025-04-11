@@ -11,7 +11,7 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateTargetDto } from './dto/create-target.dto';
 import { TargetService } from './target.service';
 
-@ApiTags('target')
+@ApiTags('Target Controller')
 @Controller()
 export class TargetController {
   constructor(
