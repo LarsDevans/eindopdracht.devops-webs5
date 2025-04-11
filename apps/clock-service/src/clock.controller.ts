@@ -16,7 +16,7 @@ export class ClockController {
 
     const nowUtc = new Date();
     const deadlineUtc = new Date(
-      nowUtc.getTime() + durationHours * 3600 * 1000, // TODO: This clean be a service/function itself.
+      nowUtc.getTime() + durationHours * 3600 * 1000, // TODO: This can be a service/function itself. Low priority.
     );
 
     const result = await this.clockService.create({
