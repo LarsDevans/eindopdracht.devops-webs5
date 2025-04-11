@@ -11,7 +11,6 @@ async function bootstrap() {
   // Swagger / OA docs
   const config = new DocumentBuilder()
     .setTitle('Target Service')
-    .setDescription('The target service API description')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
