@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ClockServiceService } from './clock-service.service';
+import { ClockService } from './clock.service';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -10,8 +10,8 @@ import {
 @ApiBearerAuth()
 @ApiTags('clock')
 @Controller()
-export class ClockServiceController {
-  constructor(private readonly clockServiceService: ClockServiceService) {}
+export class ClockController {
+  constructor(private readonly clockService: ClockService) {}
 
   @Get()
   @ApiResponse({
@@ -23,6 +23,6 @@ export class ClockServiceController {
     description: 'Returns hello',
   })
   getHello(): string {
-    return this.clockServiceService.getHello();
+    return this.clockService.getHello();
   }
 }
