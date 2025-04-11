@@ -8,6 +8,11 @@ import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
+  constructor(
+    private readonly jwtSecret: string,
+    private readonly apiKey: string,
+  ) {}
+
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
@@ -21,11 +26,9 @@ export class ApiKeyGuard implements CanActivate {
     const token = authHeader.split(' ')[1];
 
     try {
-      const decoded = jwt.verify(token, process.env.API_JWT_SECRET_TARGET) as {
-        apiKey: string;
-      };
+      const decoded = jwt.verify(token, this.jwtSecret) as { apiKey: string };
 
-      if (decoded.apiKey !== process.env.API_KEY_TARGET) {
+      if (decoded.apiKey !== this.apiKey) {
         throw new UnauthorizedException('Invalid API Key');
       }
 

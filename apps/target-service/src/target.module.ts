@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Target } from './entities/target.entity';
 import { TargetController } from './target.controller';
 import { TargetService } from './target.service';
-import { ApiKeyGuard } from './auth/api-key.guard';
+import { ApiKeyGuard } from '@app/types';
 import { APP_GUARD } from '@nestjs/core';
 
 @Module({
@@ -28,7 +28,12 @@ import { APP_GUARD } from '@nestjs/core';
     TargetService,
     {
       provide: APP_GUARD,
-      useClass: ApiKeyGuard,
+      useFactory: () => {
+        return new ApiKeyGuard(
+          process.env.API_JWT_SECRET_TARGET,
+          process.env.API_KEY_TARGET,
+        );
+      },
     },
   ],
 })
