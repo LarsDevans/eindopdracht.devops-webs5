@@ -1,8 +1,30 @@
+import { ActionResult } from '@app/types';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+
+import { Target } from './entities/target.entity';
+import { CreateTargetDto } from './dto/create-target.dto';
 
 @Injectable()
 export class TargetService {
-  getHello(): string {
-    return 'Hello World!';
+  constructor(
+    @InjectRepository(Target)
+    private readonly targetRepository: Repository<Target>,
+  ) {}
+
+  async create(createTargetDto: CreateTargetDto): Promise<ActionResult> {
+    const target = this.targetRepository.create({
+      uuid: uuidv4(),
+      ...createTargetDto,
+    });
+    await this.targetRepository.save(target);
+
+    return {
+      success: true,
+      reason: `Target ${target.uuid} successfully created.`,
+      data: target,
+    };
   }
 }
