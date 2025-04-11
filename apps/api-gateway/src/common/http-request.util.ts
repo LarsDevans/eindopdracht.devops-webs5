@@ -17,6 +17,7 @@ export async function handleHttpRequest<T>(
     );
     return result;
   } catch (error) {
+    console.log(`Error during ${context}:`, error);
     throw new Error(`Error: ${error.message}`);
   }
 }

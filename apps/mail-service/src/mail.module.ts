@@ -17,6 +17,7 @@ import { TargetsModule } from './targets/targets.module';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_MAIL_DB,
       autoLoadEntities: true,
+      synchronize: true,
     }),
     KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
