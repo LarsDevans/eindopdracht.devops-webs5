@@ -48,7 +48,7 @@ export class ClockService {
       this.kafkaService.emit('target.completed', {
         topic: 'target.completed',
         timestamp: new Date().toISOString(),
-        data: job.targetUuid,
+        data: { targetUuid: job.targetUuid },
       });
 
       console.log('Processed job with target UUID:', job.targetUuid);

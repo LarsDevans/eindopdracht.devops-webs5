@@ -1,10 +1,10 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity('users')
-export class User {
+@Entity('targets')
+export class Target {
   @PrimaryColumn()
   uuid: string;
 
   @Column()
-  email: string;
+  ownerUuid: string;
 }
