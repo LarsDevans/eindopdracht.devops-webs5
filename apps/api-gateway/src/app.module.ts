@@ -6,6 +6,8 @@ import { TargetController } from './controllers/target.controller';
 import { TargetService } from './services/target.service';
 import { HttpModule } from '@nestjs/axios';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './common/auth.guard';
 
 @Module({
   imports: [
@@ -16,6 +18,13 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController, TargetController],
-  providers: [AppService, TargetService],
+  providers: [
+    AppService,
+    TargetService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

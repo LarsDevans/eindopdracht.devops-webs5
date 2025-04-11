@@ -15,7 +15,14 @@ async function bootstrap() {
     .setDescription('The Gateway service API description')
     .setVersion('1.0')
     .addTag('gateway')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'access-token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
