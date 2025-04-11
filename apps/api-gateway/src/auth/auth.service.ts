@@ -1,6 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
@@ -10,7 +9,6 @@ import { DataSource } from 'typeorm';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRepository(User)
     private readonly dataSource: DataSource,
   ) {}
 
