@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Target } from './entities/target.entity';
 import { TargetController } from './target.controller';
 import { TargetService } from './target.service';
+import { ApiKeyGuard } from './auth/api-key.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -22,6 +24,12 @@ import { TargetService } from './target.service';
     KafkaModule.register({ groupId: 'target-consumer' }),
   ],
   controllers: [TargetController],
-  providers: [TargetService],
+  providers: [
+    TargetService,
+    {
+      provide: APP_GUARD,
+      useClass: ApiKeyGuard,
+    },
+  ],
 })
 export class TargetModule {}
