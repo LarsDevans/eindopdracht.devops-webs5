@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { TargetServiceController } from './target-service.controller';
-import { TargetServiceService } from './target-service.service';
+import { TargetController } from './target.controller';
+import { TargetService } from './target.service';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { TargetServiceService } from './target-service.service';
       database: process.env.MYSQL_TARGET_DB,
     }),
   ],
-  controllers: [TargetServiceController],
-  providers: [TargetServiceService],
+  controllers: [TargetController],
+  providers: [TargetService],
 })
-export class TargetServiceModule {}
+export class TargetModule {}

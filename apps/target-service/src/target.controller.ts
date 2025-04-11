@@ -1,5 +1,4 @@
 import { Controller, Get } from '@nestjs/common';
-import { TargetServiceService } from './target-service.service';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -7,11 +6,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { TargetService } from './target.service';
+
 @ApiBearerAuth()
 @ApiTags('target')
 @Controller()
-export class TargetServiceController {
-  constructor(private readonly targetServiceService: TargetServiceService) {}
+export class TargetController {
+  constructor(private readonly targetService: TargetService) {}
 
   @Get()
   @ApiResponse({
@@ -23,6 +24,6 @@ export class TargetServiceController {
     description: 'Returns hello',
   })
   getHello(): string {
-    return this.targetServiceService.getHello();
+    return this.targetService.getHello();
   }
 }
