@@ -1,11 +1,5 @@
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Inject,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateTargetDto } from './dto/create-target.dto';
@@ -30,28 +24,10 @@ export class TargetController {
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async create(@Body() createTargetDto: CreateTargetDto) {
-    const requiredFields: (keyof CreateTargetDto)[] = [
-      'imageBase64',
-      'durationHours',
-      'nearbyLatitude',
-      'nearbyLongitude',
-      'radiusMeters',
-      'ownerUuid',
-    ];
-
-    const isValid = requiredFields.every(
-      (field) =>
-        createTargetDto[field] !== undefined && createTargetDto[field] !== null,
-    );
-
-    if (!isValid) {
-      throw new BadRequestException('Missing required fields');
-    }
-
     const result = await this.targetService.create(createTargetDto);
     if (result.success) {
       this.kafkaService.emit('target.created', {
-        topic: 'target.create',
+        topic: 'target.created',
         timestamp: Date(),
         data: result.data,
       });

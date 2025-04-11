@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { TargetModule } from './target.module';
 import { attachKafka } from '@app/kafka';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(TargetModule);
@@ -15,6 +16,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(process.env.port ?? 3000);
   await attachKafka(app, 'target-consumer');
