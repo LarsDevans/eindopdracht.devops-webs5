@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { ClockServiceModule } from './../src/clock-service.module';
+import { ClockModule } from '../src/clock.module';
 
-describe('ClockServiceController (e2e)', () => {
+describe('ClockController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [ClockServiceModule],
+      imports: [ClockModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
