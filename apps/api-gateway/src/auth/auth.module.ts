@@ -25,7 +25,7 @@ import { AuthController } from './auth.controller';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_AUTH_DB,
       entities: [User],
-      synchronize: true,
+      synchronize: true, // Set to false in production
     }),
     TypeOrmModule.forFeature([User]),
   ],
