@@ -22,7 +22,7 @@ export class ClockService {
 
     return {
       success: true,
-      reason: `Clock ${clock.targetUuid} successfully created`,
+      reason: `Clock scheduled for ${clock.targetUuid} at ${clock.deadlineUtc.toISOString()}`,
       data: clock,
     };
   }
