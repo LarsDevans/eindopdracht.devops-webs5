@@ -24,7 +24,7 @@ import { AuthGuard } from './common/auth.guard';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    },
+    }, // TODO: CHECK OF DE GEBRUIKER IN DE DATABASE STAAT
   ],
 })
 export class AppModule {}
