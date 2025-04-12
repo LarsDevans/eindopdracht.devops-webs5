@@ -7,6 +7,7 @@ import { ApiKeyGuard } from '@app/types';
 import { TargetsController } from './targets/targets.controller';
 import { TargetsService } from './targets/targets.service';
 import { TargetsModule } from './targets/targets.module';
+import { KafkaModule } from '@app/kafka';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TargetsModule } from './targets/targets.module';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_SUBMISSION_DB,
     }),
+    KafkaModule.register({ groupId: 'submission-consumer' }),
     TargetsModule,
   ],
   controllers: [SubmissionController, TargetsController],
