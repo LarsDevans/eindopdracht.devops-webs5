@@ -7,8 +7,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Submission } from './submission.service';
-import { CreateSubmissionDto } from 'apps/submission-service/src/dto/create-submission.dto';
 import * as jwt from 'jsonwebtoken';
+import { CreateSubmissionDto } from './dto/create-submission.dto';
 
 @Controller('submission')
 @ApiTags('submission')
@@ -26,8 +26,20 @@ export class SubmissionController {
   @ApiResponse({ status: 201, description: 'Submission created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
-  async create(@Body() createSubmissionDto: CreateSubmissionDto) {
-    this.submission.create(createSubmissionDto);
+  async create(
+    @Body() createSubmissionDto: CreateSubmissionDto,
+    @Req() req: Request,
+  ) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.decode(token) as { sub?: string };
+
+    const submissionDto = {
+      ...createSubmissionDto,
+      ownerUuid: decoded.sub,
+    };
+
+    this.submission.create(submissionDto);
   }
 
   @Delete()
