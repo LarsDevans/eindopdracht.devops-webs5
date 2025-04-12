@@ -5,3 +5,5 @@ export * from './dto/index';
 export * from './guards/index';
 export * from './strategies/index';
 export * from './utils/index';
+export * from './decorators/index';
+export * from './user/index';
