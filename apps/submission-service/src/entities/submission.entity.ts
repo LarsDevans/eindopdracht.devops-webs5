@@ -1,9 +1,14 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Target } from '../targets/entities/target.entity';
 
 @Entity('submissions')
 export class Submission {
   @PrimaryColumn()
   uuid: string;
+
+  @ManyToOne(() => Target, { eager: false })
+  @JoinColumn({ name: 'targetUuid', referencedColumnName: 'uuid' })
+  target: Target;
 
   @Column()
   targetUuid: string;
