@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubmissionServiceController } from './submission-service.controller';
 import { SubmissionServiceService } from './submission-service.service';
 import { ApiKeyGuard } from '@app/types';
+import { Reflector } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -21,12 +22,14 @@ import { ApiKeyGuard } from '@app/types';
     SubmissionServiceService,
     {
       provide: 'APP_GUARD',
-      useFactory: () => {
+      useFactory: (reflector: Reflector) => {
         return new ApiKeyGuard(
           process.env.API_JWT_SECRET_SUBMISSION,
           process.env.API_KEY_SUBMISSION,
+          reflector,
         );
       },
+      inject: [Reflector],
     },
   ],
 })

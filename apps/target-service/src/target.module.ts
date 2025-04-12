@@ -6,7 +6,7 @@ import { Target } from './entities/target.entity';
 import { TargetController } from './target.controller';
 import { TargetService } from './target.service';
 import { ApiKeyGuard } from '@app/types';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, Reflector } from '@nestjs/core';
 import { ImgbbModule } from '@app/imgbb';
 
 @Module({
@@ -30,12 +30,14 @@ import { ImgbbModule } from '@app/imgbb';
     TargetService,
     {
       provide: APP_GUARD,
-      useFactory: () => {
+      useFactory: (reflector: Reflector) => {
         return new ApiKeyGuard(
           process.env.API_JWT_SECRET_TARGET,
           process.env.API_KEY_TARGET,
+          reflector,
         );
       },
+      inject: [Reflector],
     },
   ],
 })
