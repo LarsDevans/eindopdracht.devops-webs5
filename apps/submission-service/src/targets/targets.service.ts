@@ -35,4 +35,9 @@ export class TargetsService {
       data: null,
     };
   }
+
+  async findOne(targetUuid: string): Promise<ActionResult> {
+    const target = await this.targetsRepository.findOneBy({ uuid: targetUuid });
+    return { success: target != null, reason: '', data: target || null };
+  }
 }

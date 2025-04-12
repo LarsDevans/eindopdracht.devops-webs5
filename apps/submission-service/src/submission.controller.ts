@@ -10,6 +10,7 @@ import {
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { Public } from '@app/auth';
+import { TargetsService } from './targets/targets.service';
 
 @ApiBearerAuth()
 @ApiTags('Submission Controller')
@@ -17,6 +18,7 @@ import { Public } from '@app/auth';
 export class SubmissionController {
   constructor(
     private readonly submissionService: SubmissionService,
+    private readonly targetsService: TargetsService,
     @Inject(KAFKA_CLIENT_NAME) private readonly kafkaService: KafkaService,
   ) {}
 
@@ -32,6 +34,17 @@ export class SubmissionController {
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async create(@Body() createSubmissionDto: CreateSubmissionDto) {
+    const targetResult = await this.targetsService.findOne(
+      createSubmissionDto.targetUuid,
+    );
+
+    if (targetResult.data.closedForSubmission) {
+      return {
+        message: 'Failed to send submission. Submission timeframe has passed.',
+        data: null,
+      };
+    }
+
     const result = await this.submissionService.create(createSubmissionDto);
     if (result.success) {
       console.log(result.reason);
