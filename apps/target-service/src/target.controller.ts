@@ -1,5 +1,13 @@
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
-import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBody,
   ApiOperation,
@@ -10,6 +18,7 @@ import {
 
 import { CreateTargetDto } from '@app/types';
 import { TargetService } from './target.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Target Controller')
 @Controller()
@@ -29,6 +38,7 @@ export class TargetController {
   @ApiResponse({ status: 201, description: 'Target created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @UseInterceptors(FileInterceptor('image'))
   async create(@Body() createTargetDto: CreateTargetDto) {
     const result = await this.targetService.create(createTargetDto);
     if (result.success) {
