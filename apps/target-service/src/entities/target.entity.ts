@@ -5,8 +5,8 @@ export class Target {
   @PrimaryColumn()
   uuid: string;
 
-  @Column('text')
-  imageBase64: string;
+  @Column()
+  imageUrl: string;
 
   @Column('int')
   durationHours: number;

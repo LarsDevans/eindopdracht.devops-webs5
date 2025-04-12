@@ -24,6 +24,12 @@
       "@app/auth/*": [
         "libs/auth/src/*"
       ],
+      "@app/imgbb": [
+        "libs/imgbb/src"
+      ],
+      "@app/imgbb/*": [
+        "libs/imgbb/src/*"
+      ],
       "@app/kafka": [
         "libs/kafka/src"
       ],

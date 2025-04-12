@@ -7,6 +7,7 @@ import { TargetController } from './target.controller';
 import { TargetService } from './target.service';
 import { ApiKeyGuard } from '@app/types';
 import { APP_GUARD } from '@nestjs/core';
+import { ImgbbModule } from '@app/imgbb';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { APP_GUARD } from '@nestjs/core';
     }),
     TypeOrmModule.forFeature([Target]),
     KafkaModule.register({ groupId: 'target-consumer' }),
+    ImgbbModule,
   ],
   controllers: [TargetController],
   providers: [
