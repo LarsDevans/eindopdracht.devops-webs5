@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScoreService } from './score.service';
 import { KafkaModule } from '@app/kafka';
 import { TargetsModule } from './targets/targets.module';
+import { ImaggaModule } from '@app/imagga';
+import { AppController } from './score.controller';
 
 @Module({
   imports: [
@@ -19,7 +21,9 @@ import { TargetsModule } from './targets/targets.module';
     }),
     KafkaModule.register({ groupId: 'score-consumer' }),
     TargetsModule,
+    ImaggaModule,
   ],
+  controllers: [AppController],
   providers: [ScoreService],
 })
 export class ScoreModule {}
