@@ -6,6 +6,7 @@ import { SubmissionService } from './submission.service';
 import { ApiKeyGuard } from '@app/types';
 import { TargetsModule } from './targets/targets.module';
 import { KafkaModule } from '@app/kafka';
+import { Submission } from './entities/submission.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { KafkaModule } from '@app/kafka';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([Submission]),
     KafkaModule.register({ groupId: 'submission-consumer' }),
     TargetsModule,
   ],
@@ -35,5 +37,6 @@ import { KafkaModule } from '@app/kafka';
       },
     },
   ],
+  exports: [SubmissionService],
 })
 export class SubmissionModule {}

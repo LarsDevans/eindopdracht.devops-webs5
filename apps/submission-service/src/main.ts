@@ -11,9 +11,7 @@ async function bootstrap() {
   // Swagger / OA docs
   const config = new DocumentBuilder()
     .setTitle('Submission Service')
-    .setDescription('The submission service API description')
     .setVersion('1.0')
-    .addTag('submission')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
