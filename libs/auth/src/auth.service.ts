@@ -1,12 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../user/user.entity';
+import { User } from '../../../apps/api-gateway/src/features/user/user.entity';
 import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { DataSource, QueryRunner } from 'typeorm';
 import { KafkaService } from '@app/kafka';
 import { TopicPayload } from '@app/types';
-import { UserService } from '../user/user.service';
+import { UserService } from '../../../apps/api-gateway/src/features/user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +30,11 @@ export class AuthService {
     } catch (error) {
       await this.rollbackTransaction(queryRunner);
       console.error('Error registering user:', error);
-      throw error;
+      throw new ConflictException({
+        success: false,
+        reason: 'Registration failed.',
+        data: error.message,
+      });
     } finally {
       await queryRunner.release();
     }
@@ -66,7 +70,7 @@ export class AuthService {
       throw new ConflictException({
         success: false,
         reason: 'Email is already in use.',
-        data: existingUser,
+        data: existingUser.email,
       });
     }
 

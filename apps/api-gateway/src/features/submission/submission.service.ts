@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { HttpRequestService } from '../../common/http-requests/http-request.service';
 import { SUBMISSION_SERVICE_URL } from '../../config/api.constants';
-import { generateOpaqueToken } from '../auth/utils/jwt.util';
+import { generateOpaqueToken } from '@app/auth';
+import { HttpRequestService } from '../../common/http-requests/http-request.service';
 
 @Injectable()
 export class SubmissionService {

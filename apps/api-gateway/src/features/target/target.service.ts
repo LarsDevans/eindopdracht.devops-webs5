@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { TARGET_SERVICE_URL } from '../../config/api.constants';
 import { HttpRequestService } from '../../common/http-requests/http-request.service';
-import { generateOpaqueToken } from '../auth/utils/jwt.util';
+import { generateOpaqueToken } from '@app/auth';
+import { TARGET_SERVICE_URL } from '../../config/api.constants';
 import { CreateTargetDto } from '@app/types';
 
 @Injectable()
