@@ -4,6 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubmissionController } from './submission.controller';
 import { SubmissionService } from './submission.service';
 import { ApiKeyGuard } from '@app/types';
+import { TargetsController } from './targets/targets.controller';
+import { TargetsService } from './targets/targets.service';
+import { TargetsModule } from './targets/targets.module';
 
 @Module({
   imports: [
@@ -15,8 +18,9 @@ import { ApiKeyGuard } from '@app/types';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_SUBMISSION_DB,
     }),
+    TargetsModule,
   ],
-  controllers: [SubmissionController],
+  controllers: [SubmissionController, TargetsController],
   providers: [
     SubmissionService,
     {
@@ -28,6 +32,7 @@ import { ApiKeyGuard } from '@app/types';
         );
       },
     },
+    TargetsService,
   ],
 })
 export class SubmissionModule {}
