@@ -1,4 +1,4 @@
-export const getTargetCreatedTemplate = (
+export const getNewSubmissionTemplate = (
   targetUuid: string,
   submissionUuid: string,
 ) => {
