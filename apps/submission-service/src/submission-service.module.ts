@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SubmissionServiceController } from './submission-service.controller';
 import { SubmissionServiceService } from './submission-service.service';
-import { ApiKeyGuard } from '@app/types';
+import { ApiKeyGuard } from '@app/auth';
 import { Reflector } from '@nestjs/core';
 
 @Module({
