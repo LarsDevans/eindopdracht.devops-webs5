@@ -1,26 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { SUBMISSION_SERVICE_URL } from '../../config/api.constants';
-import { generateOpaqueToken } from '@app/auth';
-import { HttpRequestService } from '../../common/http-requests/http-request.service';
+import { AuthorizedRequestService } from '../../common/http-requests/authorized-request.service';
 
 @Injectable()
 export class SubmissionService {
-  constructor(private readonly httpRequestService: HttpRequestService) {}
+  constructor(
+    private readonly authorizedRequestService: AuthorizedRequestService,
+  ) {}
 
   async getHello(): Promise<string> {
     try {
-      const headers = {
-        Authorization: `Bearer ${generateOpaqueToken('submission')}`,
-      };
-
-      const result = await this.httpRequestService.sendRequest<string>(
+      return await this.authorizedRequestService.sendAuthorizedRequest<string>(
+        'submission',
         'GET',
-        `${SUBMISSION_SERVICE_URL}`,
-        null,
-        headers,
+        SUBMISSION_SERVICE_URL,
       );
-
-      return result;
     } catch (error) {
       console.error('Error getting hello:', error);
       return error.message;
