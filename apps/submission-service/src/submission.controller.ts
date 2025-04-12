@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Inject, Post } from '@nestjs/common';
 import { SubmissionService } from './submission.service';
 import {
   ApiBearerAuth,
@@ -9,8 +9,8 @@ import {
 } from '@nestjs/swagger';
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
-import { Public } from '@app/auth';
 import { TargetsService } from './targets/targets.service';
+import { Payload } from '@nestjs/microservices';
 
 @ApiBearerAuth()
 @ApiTags('Submission Controller')
@@ -22,7 +22,6 @@ export class SubmissionController {
     @Inject(KAFKA_CLIENT_NAME) private readonly kafkaService: KafkaService,
   ) {}
 
-  @Public()
   @Post()
   @ApiOperation({
     summary: 'Create a new submission',
@@ -57,5 +56,29 @@ export class SubmissionController {
     }
 
     return { message: 'Submission created successfully', data: result.data };
+  }
+
+  @Delete()
+  @ApiOperation({
+    summary: 'Remove a submission',
+    description: 'Remove a submission with the UUID.',
+  })
+  @ApiBody({ type: CreateSubmissionDto })
+  @ApiResponse({ status: 200, description: 'Submission removed successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request body' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  async remove(@Payload() data: { uuid: string; userUuid: string }) {
+    const { uuid, userUuid } = data;
+    const submissionResult = await this.submissionService.findOne(uuid);
+    if (!submissionResult.data) {
+      return { message: `Submission ${uuid} does not exists.` };
+    }
+
+    if (userUuid != submissionResult.data.ownerUuid) {
+      return { message: `You are not allowed to remove ${uuid}.` };
+    }
+
+    const removeResult = await this.submissionService.remove(uuid);
+    return { message: removeResult.reason };
   }
 }

@@ -28,4 +28,26 @@ export class SubmissionService {
       data: submission,
     };
   }
+
+  async findOne(uuid: string): Promise<ActionResult> {
+    const submissionResult = await this.submissionRepository.findOneBy({
+      uuid,
+    });
+
+    return {
+      success: submissionResult != null,
+      reason: '',
+      data: submissionResult || null,
+    };
+  }
+
+  async remove(uuid: string): Promise<ActionResult> {
+    await this.submissionRepository.delete({ uuid });
+
+    return {
+      success: true,
+      reason: `Submission ${uuid} successfully removed.`,
+      data: null,
+    };
+  }
 }
