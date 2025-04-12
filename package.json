@@ -51,8 +51,9 @@
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
     "@types/bcrypt": "^5.0.2",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.1",
     "@types/jest": "^29.5.2",
+    "@types/multer": "^1.4.12",
     "@types/node": "^20.3.1",
     "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^6.0.0",
@@ -93,6 +94,7 @@
     ],
     "moduleNameMapper": {
       "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
+      "^@app/imgbb(|/.*)$": "<rootDir>/libs/imgbb/src/$1",
       "^@app/kafka(|/.*)$": "<rootDir>/libs/kafka/src/$1",
       "^@app/types(|/.*)$": "<rootDir>/libs/types/src/$1"
     }

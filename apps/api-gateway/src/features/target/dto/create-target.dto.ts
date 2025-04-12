@@ -1,18 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateTargetDto {
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ description: 'Base64-encoded image string' })
-  imageBase64: string;
-
-  @IsNotEmpty()
+  @Type(() => Number)
   @IsNumber()
   @ApiProperty({
     description: 'Duration of the target in hours',
     example: 72,
-    type: 'integer',
   })
   durationHours: number;
 
@@ -33,6 +29,7 @@ export class CreateTargetDto {
   nearbyLongitude: string;
 
   @IsNotEmpty()
+  @Type(() => Number)
   @IsNumber()
   @ApiProperty({
     description: 'Radius in meters around the location',

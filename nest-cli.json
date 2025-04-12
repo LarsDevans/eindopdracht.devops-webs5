@@ -37,6 +37,15 @@
         "tsConfigPath": "apps/clock-service/tsconfig.app.json"
       }
     },
+    "imgbb": {
+      "type": "library",
+      "root": "libs/imgbb",
+      "entryFile": "index",
+      "sourceRoot": "libs/imgbb/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/imgbb/tsconfig.lib.json"
+      }
+    },
     "kafka": {
       "type": "library",
       "root": "libs/kafka",

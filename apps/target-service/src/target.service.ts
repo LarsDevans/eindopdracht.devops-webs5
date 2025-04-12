@@ -6,18 +6,29 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Target } from './entities/target.entity';
 import { CreateTargetDto } from '@app/types';
+import { ImageUploadService } from '@app/imgbb';
 
 @Injectable()
 export class TargetService {
   constructor(
     @InjectRepository(Target)
     private readonly targetRepository: Repository<Target>,
+    private readonly imgbbService: ImageUploadService,
   ) {}
 
   async create(createTargetDto: CreateTargetDto): Promise<ActionResult> {
+    const imageUrl = await this.imgbbService.uploadBase64Image(
+      createTargetDto.imageBuffer,
+    );
+
     const target = this.targetRepository.create({
       uuid: uuidv4(),
-      ...createTargetDto,
+      imageUrl,
+      durationHours: createTargetDto.durationHours,
+      nearbyLatitude: createTargetDto.nearbyLatitude,
+      nearbyLongitude: createTargetDto.nearbyLongitude,
+      radiusMeters: createTargetDto.radiusMeters,
+      ownerUuid: createTargetDto.ownerUuid,
     });
     await this.targetRepository.save(target);
 

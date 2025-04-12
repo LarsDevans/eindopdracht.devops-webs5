@@ -3,9 +3,11 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateTargetDto {
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ description: 'Base64-encoded image string' })
-  imageBase64: string;
+  @ApiProperty({
+    description: 'Image file in base64 format',
+    example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',
+  })
+  imageBuffer: string;
 
   @IsNotEmpty()
   @IsNumber()

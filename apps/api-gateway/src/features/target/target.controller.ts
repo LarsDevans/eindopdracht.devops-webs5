@@ -1,14 +1,26 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+  Headers,
+  UnauthorizedException,
+  Body,
+} from '@nestjs/common';
 import { TargetService } from '../target/target.service';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateTargetDto } from '@app/types';
-import { CreateTargetDto as GatewayCreateTargetDto } from '../target/dto/create-target.dto';
+import { CreateTargetDto as GatewayCreateTargetDto } from './dto/create-target.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
 import * as jwt from 'jsonwebtoken';
 
 @Controller('target')
@@ -23,28 +35,42 @@ export class TargetController {
     description:
       'Creates a new target with provided data. All fields are required.',
   })
+  @ApiConsumes('multipart/form-data')
   @ApiBody({ type: GatewayCreateTargetDto })
   @ApiResponse({ status: 201, description: 'Target created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @UseInterceptors(FileInterceptor('image'))
   async create(
-    @Body() gatewayCreateTargetDto: GatewayCreateTargetDto,
-    @Req() req: Request,
+    @UploadedFile() image: Express.Multer.File,
+    @Body() dto: GatewayCreateTargetDto,
+    @Headers('authorization') authHeader: string,
   ) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
-    if (!token) {
-      throw new Error('Authorization token is missing');
+    if (!authHeader) {
+      throw new UnauthorizedException('Authorization header is missing');
     }
-    const decodedToken = jwt.decode(token) as { sub: string };
-    const ownerUuid = decodedToken?.sub;
-    if (!ownerUuid) {
-      throw new Error('Owner UUID is missing in the token');
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.decode(token) as { sub?: string };
+
+    if (!decoded?.sub) {
+      throw new UnauthorizedException(
+        'Invalid token: missing subject (user id)',
+      );
+    }
+
+    if (!image) {
+      throw new BadRequestException('Image file is required');
     }
 
     const createTargetDto: CreateTargetDto = {
-      ...gatewayCreateTargetDto,
-      ownerUuid,
+      imageBuffer: image.buffer.toString('base64'),
+      durationHours: Number(dto.durationHours),
+      nearbyLatitude: dto.nearbyLatitude,
+      nearbyLongitude: dto.nearbyLongitude,
+      radiusMeters: Number(dto.radiusMeters),
+      ownerUuid: decoded.sub,
     };
 
     return this.targetService.create(createTargetDto);

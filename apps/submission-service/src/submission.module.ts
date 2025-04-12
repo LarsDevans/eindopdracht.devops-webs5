@@ -3,10 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SubmissionController } from './submission.controller';
 import { SubmissionService } from './submission.service';
-import { ApiKeyGuard } from '@app/types';
 import { TargetsModule } from './targets/targets.module';
 import { KafkaModule } from '@app/kafka';
 import { Submission } from './entities/submission.entity';
+import { Reflector } from '@nestjs/core';
+import { ApiKeyGuard } from '@app/auth';
 
 @Module({
   imports: [
@@ -29,12 +30,14 @@ import { Submission } from './entities/submission.entity';
     SubmissionService,
     {
       provide: 'APP_GUARD',
-      useFactory: () => {
+      useFactory: (reflector: Reflector) => {
         return new ApiKeyGuard(
           process.env.API_JWT_SECRET_SUBMISSION,
           process.env.API_KEY_SUBMISSION,
+          reflector,
         );
       },
+      inject: [Reflector],
     },
   ],
   exports: [SubmissionService],
