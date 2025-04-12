@@ -4,8 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubmissionController } from './submission.controller';
 import { SubmissionService } from './submission.service';
 import { ApiKeyGuard } from '@app/types';
-import { TargetsController } from './targets/targets.controller';
-import { TargetsService } from './targets/targets.service';
 import { TargetsModule } from './targets/targets.module';
 import { KafkaModule } from '@app/kafka';
 
@@ -18,11 +16,13 @@ import { KafkaModule } from '@app/kafka';
       username: process.env.MYSQL_ROOT_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_SUBMISSION_DB,
+      autoLoadEntities: true,
+      synchronize: true,
     }),
     KafkaModule.register({ groupId: 'submission-consumer' }),
     TargetsModule,
   ],
-  controllers: [SubmissionController, TargetsController],
+  controllers: [SubmissionController],
   providers: [
     SubmissionService,
     {
@@ -34,7 +34,6 @@ import { KafkaModule } from '@app/kafka';
         );
       },
     },
-    TargetsService,
   ],
 })
 export class SubmissionModule {}
