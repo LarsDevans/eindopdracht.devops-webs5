@@ -10,14 +10,6 @@ export class CreateTargetDto {
   imageBuffer: string;
 
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    description: 'MIME type of the image',
-    example: 'image/png',
-  })
-  imageMimeType: string;
-
-  @IsNotEmpty()
   @IsNumber()
   @ApiProperty({
     description: 'Duration of the target in hours',
