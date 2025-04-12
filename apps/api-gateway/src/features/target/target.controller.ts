@@ -36,18 +36,7 @@ export class TargetController {
       'Creates a new target with provided data. All fields are required.',
   })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        image: { type: 'string', format: 'binary' },
-        durationHours: { type: 'number', example: 72 },
-        nearbyLatitude: { type: 'string', example: '40.4447 N' },
-        nearbyLongitude: { type: 'string', example: '3.9525 W' },
-        radiusMeters: { type: 'number', example: 200 },
-      },
-    },
-  })
+  @ApiBody({ type: GatewayCreateTargetDto })
   @ApiResponse({ status: 201, description: 'Target created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
