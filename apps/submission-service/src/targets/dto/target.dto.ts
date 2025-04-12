@@ -6,4 +6,9 @@ export class CreateTargetDto {
   @IsString()
   @ApiProperty({ description: 'UUID of the target' })
   uuid: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ description: 'UUID of the target owner' })
+  ownerUuid: string;
 }

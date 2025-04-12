@@ -9,9 +9,9 @@ export class TargetsController {
 
   @MessagePattern('target.created')
   async create(@Payload() topicPayload: TopicPayload) {
-    const { uuid } = topicPayload.data;
+    const { uuid, ownerUuid } = topicPayload.data;
 
-    const result = await this.targetsService.create({ uuid });
+    const result = await this.targetsService.create({ uuid, ownerUuid });
     if (result.success) {
       console.log(result.reason);
     }

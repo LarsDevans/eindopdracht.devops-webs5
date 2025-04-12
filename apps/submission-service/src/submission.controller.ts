@@ -74,7 +74,10 @@ export class SubmissionController {
       return { message: `Submission ${uuid} does not exists.` };
     }
 
-    if (userUuid != submissionResult.data.ownerUuid) {
+    const { targetUuid, ownerUuid } = submissionResult.data;
+    const targetResult = await this.targetsService.findOne(targetUuid);
+
+    if (userUuid != ownerUuid || userUuid != targetResult.data.ownerUuid) {
       return { message: `You are not allowed to remove ${uuid}.` };
     }
 
