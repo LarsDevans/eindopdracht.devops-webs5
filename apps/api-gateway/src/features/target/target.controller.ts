@@ -32,7 +32,8 @@ export class TargetController {
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Create a new target',
-    description: 'Creates a new target with provided data. All fields are required.',
+    description:
+      'Creates a new target with provided data. All fields are required.',
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
