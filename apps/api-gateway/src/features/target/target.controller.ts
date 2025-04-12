@@ -4,9 +4,9 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
-  Headers,
   UnauthorizedException,
   Body,
+  Req,
 } from '@nestjs/common';
 import { TargetService } from '../target/target.service';
 import {
@@ -20,7 +20,6 @@ import {
 import { CreateTargetDto } from '@app/types';
 import { CreateTargetDto as GatewayCreateTargetDto } from './dto/create-target.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
 import * as jwt from 'jsonwebtoken';
 
 @Controller('target')
@@ -36,7 +35,18 @@ export class TargetController {
       'Creates a new target with provided data. All fields are required.',
   })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ type: GatewayCreateTargetDto })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: { type: 'string', format: 'binary' },
+        durationHours: { type: 'number', example: 72 },
+        nearbyLatitude: { type: 'string', example: '40.4447 N' },
+        nearbyLongitude: { type: 'string', example: '3.9525 W' },
+        radiusMeters: { type: 'number', example: 200 },
+      },
+    },
+  })
   @ApiResponse({ status: 201, description: 'Target created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -45,8 +55,9 @@ export class TargetController {
   async create(
     @UploadedFile() image: Express.Multer.File,
     @Body() dto: GatewayCreateTargetDto,
-    @Headers('authorization') authHeader: string,
+    @Req() req: Request,
   ) {
+    const authHeader = req.headers['authorization'];
     if (!authHeader) {
       throw new UnauthorizedException('Authorization header is missing');
     }
@@ -61,7 +72,7 @@ export class TargetController {
     }
 
     if (!image) {
-      throw new BadRequestException('Image file is required');
+      throw new BadRequestException('Image is required');
     }
 
     const createTargetDto: CreateTargetDto = {
