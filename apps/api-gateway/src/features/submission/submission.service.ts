@@ -3,7 +3,7 @@ import { SUBMISSION_SERVICE_URL } from '../../config/api.constants';
 import { AuthorizedRequestService } from '../../common/http-requests/authorized-request.service';
 
 @Injectable()
-export class SubmissionService {
+export class Submission {
   constructor(
     private readonly authorizedRequestService: AuthorizedRequestService,
   ) {}

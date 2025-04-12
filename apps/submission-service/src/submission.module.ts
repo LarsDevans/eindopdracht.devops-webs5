@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SubmissionServiceController } from './submission-service.controller';
-import { SubmissionServiceService } from './submission-service.service';
+import { SubmissionController } from './submission.controller';
+import { SubmissionService } from './submission.service';
 import { ApiKeyGuard } from '@app/types';
 
 @Module({
@@ -16,9 +16,9 @@ import { ApiKeyGuard } from '@app/types';
       database: process.env.MYSQL_SUBMISSION_DB,
     }),
   ],
-  controllers: [SubmissionServiceController],
+  controllers: [SubmissionController],
   providers: [
-    SubmissionServiceService,
+    SubmissionService,
     {
       provide: 'APP_GUARD',
       useFactory: () => {
@@ -30,4 +30,4 @@ import { ApiKeyGuard } from '@app/types';
     },
   ],
 })
-export class SubmissionServiceModule {}
+export class SubmissionModule {}

@@ -1,12 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { SubmissionServiceModule } from './submission-service.module';
+import { SubmissionModule } from './submission.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(
-    SubmissionServiceModule,
-  );
+  const app =
+    await NestFactory.create<NestExpressApplication>(SubmissionModule);
 
   // Swagger / OA docs
   const config = new DocumentBuilder()

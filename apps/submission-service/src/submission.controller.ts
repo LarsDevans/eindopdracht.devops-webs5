@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { SubmissionServiceService } from './submission-service.service';
+import { SubmissionService } from './submission.service';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -10,10 +10,8 @@ import {
 @ApiBearerAuth()
 @ApiTags('submission')
 @Controller()
-export class SubmissionServiceController {
-  constructor(
-    private readonly submissionServiceService: SubmissionServiceService,
-  ) {}
+export class SubmissionController {
+  constructor(private readonly submissionService: SubmissionService) {}
 
   @Get()
   @ApiResponse({
@@ -25,6 +23,6 @@ export class SubmissionServiceController {
     description: 'Returns hello',
   })
   getHello(): string {
-    return this.submissionServiceService.getHello();
+    return this.submissionService.getHello();
   }
 }
