@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { SubmissionService } from './submission.service';
 import {
   ApiBearerAuth,
@@ -9,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
+import { Public } from '@app/auth';
 
 @ApiBearerAuth()
 @ApiTags('Submission Controller')
@@ -19,6 +20,7 @@ export class SubmissionController {
     @Inject(KAFKA_CLIENT_NAME) private readonly kafkaService: KafkaService,
   ) {}
 
+  @Public()
   @Post()
   @ApiOperation({
     summary: 'Create a new submission',
