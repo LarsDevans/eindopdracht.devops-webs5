@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SubmissionServiceController } from './submission-service.controller';
 import { SubmissionServiceService } from './submission-service.service';
+import { ApiKeyGuard } from '@app/types';
 
 @Module({
   imports: [
@@ -16,6 +17,17 @@ import { SubmissionServiceService } from './submission-service.service';
     }),
   ],
   controllers: [SubmissionServiceController],
-  providers: [SubmissionServiceService],
+  providers: [
+    SubmissionServiceService,
+    {
+      provide: 'APP_GUARD',
+      useFactory: () => {
+        return new ApiKeyGuard(
+          process.env.API_JWT_SECRET_SUBMISSION,
+          process.env.API_KEY_SUBMISSION,
+        );
+      },
+    },
+  ],
 })
 export class SubmissionServiceModule {}

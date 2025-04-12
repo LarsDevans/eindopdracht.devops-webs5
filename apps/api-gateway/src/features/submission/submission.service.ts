@@ -1,24 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTargetDto } from '@app/types';
-import { TARGET_SERVICE_URL } from '../../config/api.constants';
+import { SUBMISSION_SERVICE_URL } from '../../config/api.constants';
 import { AuthorizedRequestService } from '../../common/http-requests/authorized-request.service';
 
 @Injectable()
-export class TargetService {
+export class SubmissionService {
   constructor(
     private readonly authorizedRequestService: AuthorizedRequestService,
   ) {}
 
-  async create(createTargetDto: CreateTargetDto): Promise<string> {
+  async getHello(): Promise<string> {
     try {
       return await this.authorizedRequestService.sendAuthorizedRequest<string>(
-        'target',
-        'POST',
-        TARGET_SERVICE_URL,
-        createTargetDto,
+        'submission',
+        'GET',
+        SUBMISSION_SERVICE_URL,
       );
     } catch (error) {
-      console.error('Error creating target:', error);
+      console.error('Error getting hello:', error);
       return error.message;
     }
   }
