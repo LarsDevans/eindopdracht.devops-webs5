@@ -19,8 +19,10 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
-  app.use(bodyParser.json({ limit: '50mb' }));
-  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  app.use(bodyParser.json({ limit: process.env.BODY_LIMIT }));
+  app.use(
+    bodyParser.urlencoded({ limit: process.env.BODY_LIMIT, extended: true }),
+  );
 
   await app.listen(process.env.port ?? 3000);
   await attachKafka(app, 'target-consumer');
