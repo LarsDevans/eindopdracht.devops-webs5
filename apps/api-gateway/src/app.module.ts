@@ -8,6 +8,7 @@ import { KafkaModule } from '@app/kafka';
 import { TargetModule } from './features/target/target.module';
 import { HttpModule } from '@nestjs/axios';
 import { SubmissionModule } from './features/submission/submission.module';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SubmissionModule } from './features/submission/submission.module';
     KafkaModule.register({ groupId: 'gateway-consumer' }),
     TargetModule,
     SubmissionModule,
+    PrometheusModule,
   ],
   controllers: [AppController],
   providers: [
