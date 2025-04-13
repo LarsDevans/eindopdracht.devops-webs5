@@ -9,6 +9,7 @@ import { Submission } from './entities/submission.entity';
 import { Reflector } from '@nestjs/core';
 import { ApiKeyGuard } from '@app/auth';
 import { ImgbbModule } from '@app/imgbb';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ImgbbModule } from '@app/imgbb';
     KafkaModule.register({ groupId: 'submission-consumer' }),
     TargetsModule,
     ImgbbModule,
+    PrometheusModule,
   ],
   controllers: [SubmissionController],
   providers: [

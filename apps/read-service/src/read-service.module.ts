@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ReadServiceController } from './read-service.controller';
 import { ReadServiceService } from './read-service.service';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ReadServiceService } from './read-service.service';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_READ_DB,
     }),
+    PrometheusModule,
   ],
   controllers: [ReadServiceController],
   providers: [ReadServiceService],

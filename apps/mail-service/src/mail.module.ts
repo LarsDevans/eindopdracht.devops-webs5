@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { TargetsController } from './targets/targets.controller';
 import { TargetsModule } from './targets/targets.module';
 import { SubmissionsModule } from './submissions/submissions.module';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SubmissionsModule } from './submissions/submissions.module';
     UsersModule,
     TargetsModule,
     SubmissionsModule,
+    PrometheusModule,
   ],
   providers: [MailService],
   controllers: [TargetsController],

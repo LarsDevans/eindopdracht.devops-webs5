@@ -1,4 +1,27 @@
 services:
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    networks:
+      - snapnet
+    ports:
+      - '${PROMETHEUS_PORT}:9090'
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+
+  grafana:
+    depends_on:
+      - prometheus
+    image: grafana/grafana:latest
+    networks:
+      - snapnet
+    ports:
+      - '${GRAFANA_PORT}:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+
   mysql-service:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -147,3 +170,5 @@ volumes:
   mysql_data:
   zookeeper_data:
   kafka_data:
+  prometheus_data:
+  grafana_data:

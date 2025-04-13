@@ -8,6 +8,7 @@ import { TargetService } from './target.service';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { ImgbbModule } from '@app/imgbb';
 import { ApiKeyGuard } from '@app/auth';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ApiKeyGuard } from '@app/auth';
     TypeOrmModule.forFeature([Target]),
     KafkaModule.register({ groupId: 'target-consumer' }),
     ImgbbModule,
+    PrometheusModule,
   ],
   controllers: [TargetController],
   providers: [
