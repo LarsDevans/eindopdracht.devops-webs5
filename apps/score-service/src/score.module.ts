@@ -10,6 +10,7 @@ import { PrometheusModule } from '@app/prometheus';
 import { SubmissionsModule } from './submissions/submissions.module';
 import { Reflector } from '@nestjs/core';
 import { ApiKeyGuard } from '@app/auth';
+import { Submission } from './submissions/entity/submission.entity';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ApiKeyGuard } from '@app/auth';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([Submission]),
     PrometheusModule,
     KafkaModule.register({ groupId: 'score-consumer' }),
     TargetsModule,
@@ -44,5 +46,6 @@ import { ApiKeyGuard } from '@app/auth';
       inject: [Reflector],
     },
   ],
+  exports: [ScoreService],
 })
 export class ScoreModule {}
