@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -14,6 +22,15 @@ import { CreateSubmissionDto } from './dto/create-submission.dto';
 @ApiTags('submission')
 export class SubmissionController {
   constructor(private readonly submission: Submission) {}
+
+  @Get('/all')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Get all submissions' })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  async getAll(@Query('targetUuid') targetUuid: string) {
+    return this.submission.getAll(targetUuid);
+  }
 
   @Post()
   @ApiBearerAuth('access-token')
@@ -39,7 +56,7 @@ export class SubmissionController {
       ownerUuid: decoded.sub,
     };
 
-    this.submission.create(submissionDto);
+    return this.submission.create(submissionDto);
   }
 
   @Delete()

@@ -41,6 +41,16 @@ export class SubmissionService {
     };
   }
 
+  async findByTarget(uuid: string): Promise<ActionResult> {
+    return {
+      success: true,
+      reason: '',
+      data: await this.submissionRepository.find({
+        where: { targetUuid: uuid },
+      }),
+    };
+  }
+
   async remove(uuid: string): Promise<ActionResult> {
     await this.submissionRepository.delete({ uuid });
 

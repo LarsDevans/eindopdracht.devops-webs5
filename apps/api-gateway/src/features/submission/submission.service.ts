@@ -9,6 +9,20 @@ export class Submission {
     private readonly authorizedRequestService: AuthorizedRequestService,
   ) {}
 
+  async getAll(targetUuid: string) {
+    try {
+      return await this.authorizedRequestService.sendAuthorizedRequest<string>(
+        'submission',
+        'GET',
+        `${SUBMISSION_SERVICE_URL}/all`,
+        { targetUuid },
+      );
+    } catch (error) {
+      console.error('Error:', error);
+      return error.message;
+    }
+  }
+
   async create(createSubmissionDto: CreateSubmissionDto) {
     try {
       return await this.authorizedRequestService.sendAuthorizedRequest<string>(

@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { SubmissionService } from './submission.service';
 import {
   ApiBearerAuth,
@@ -21,6 +29,38 @@ export class SubmissionController {
     private readonly targetsService: TargetsService,
     @Inject(KAFKA_CLIENT_NAME) private readonly kafkaService: KafkaService,
   ) {}
+
+  @Get('/all')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Get all submissions' })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  async getAll(@Query('targetUuid') targetUuid: string) {
+    const targetResult = await this.targetsService.findOne(targetUuid);
+    if (!targetResult.data) {
+      return { message: `Can not find target ${targetUuid}` };
+    }
+
+    const submissionResult = await this.submissionService.findByTarget(
+      targetResult.data.uuid,
+    );
+
+    // const authHeader = req.headers['authorization'];
+    // const token = authHeader.split(' ')[1];
+    // const decoded = jwt.decode(token) as { sub?: string };
+
+    // return { user: req.headers, owner: targetResult.data.ownerUuid };
+
+    // if (decoded.sub == targetResult.data.ownerUuid) {
+      return submissionResult.data;
+    // } else if (decoded.sub == submissionResult.data.ownerUuid) {
+    //   return { msg: 'lol' };
+    // }
+
+    return {
+      message: `You are not allowed to view the details of target ${targetUuid}`,
+    };
+  }
 
   @Post()
   @ApiOperation({
