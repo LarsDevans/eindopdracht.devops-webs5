@@ -77,6 +77,13 @@ export class SubmissionController {
       createSubmissionDto.targetUuid,
     );
 
+    if (!targetResult || !targetResult.data) {
+      return {
+        message: 'Target not found. Please check the target UUID.',
+        data: null,
+      };
+    }
+
     if (targetResult.data.closedForSubmission) {
       return {
         message: 'Failed to send submission. Submission timeframe has passed.',
