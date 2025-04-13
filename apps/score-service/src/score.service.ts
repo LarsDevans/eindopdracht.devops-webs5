@@ -1,14 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { Submission } from './submissions/entity/submission.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ScoreService {
-  constructor(
-    @InjectRepository(Submission)
-    private readonly submissionRepository: Repository<Submission>,
-  ) {}
+  constructor() {}
 
   async calculateScore(
     distance: number, // 0 = perfect match, >0 = slechter
@@ -28,11 +22,5 @@ export class ScoreService {
     const finalScore = (0.7 * visualScore + 0.3 * timeScore) * maxScore;
 
     return Math.round(finalScore);
-  }
-
-  findAll(ownerUuid: string): Promise<Submission[] | null> {
-    return this.submissionRepository.find({
-      where: { ownerUuid },
-    });
   }
 }

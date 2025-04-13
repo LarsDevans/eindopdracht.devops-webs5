@@ -120,7 +120,7 @@ export class ScoreController {
       return console.error('Target not found:', targetUuid);
     }
 
-    const submissionResult = await this.scoreService.findAll(userUuid);
+    const submissionResult = await this.submissionService.findAll(userUuid);
     if (target.ownerUuid !== userUuid && submissionResult != null) {
       return submissionResult;
     }
