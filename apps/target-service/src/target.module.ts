@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Target } from './entities/target.entity';
 import { TargetController } from './target.controller';
 import { TargetService } from './target.service';
-import { ApiKeyGuard } from '@app/auth';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { ImgbbModule } from '@app/imgbb';
+import { ApiKeyGuard } from '@app/auth';
 import { PrometheusModule } from '@app/prometheus';
 
 @Module({

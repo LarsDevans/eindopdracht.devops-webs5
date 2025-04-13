@@ -1,10 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SubmissionServiceController } from './submission-service.controller';
-import { SubmissionServiceService } from './submission-service.service';
-import { ApiKeyGuard } from '@app/auth';
+import { SubmissionController } from './submission.controller';
+import { SubmissionService } from './submission.service';
+import { TargetsModule } from './targets/targets.module';
+import { KafkaModule } from '@app/kafka';
+import { Submission } from './entities/submission.entity';
 import { Reflector } from '@nestjs/core';
+import { ApiKeyGuard } from '@app/auth';
+import { ImgbbModule } from '@app/imgbb';
 import { PrometheusModule } from '@app/prometheus';
 
 @Module({
@@ -16,12 +20,18 @@ import { PrometheusModule } from '@app/prometheus';
       username: process.env.MYSQL_ROOT_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_SUBMISSION_DB,
+      autoLoadEntities: true,
+      synchronize: true,
     }),
+    TypeOrmModule.forFeature([Submission]),
+    KafkaModule.register({ groupId: 'submission-consumer' }),
+    TargetsModule,
+    ImgbbModule,
     PrometheusModule,
   ],
-  controllers: [SubmissionServiceController],
+  controllers: [SubmissionController],
   providers: [
-    SubmissionServiceService,
+    SubmissionService,
     {
       provide: 'APP_GUARD',
       useFactory: (reflector: Reflector) => {
@@ -34,5 +44,6 @@ import { PrometheusModule } from '@app/prometheus';
       inject: [Reflector],
     },
   ],
+  exports: [SubmissionService],
 })
-export class SubmissionServiceModule {}
+export class SubmissionModule {}

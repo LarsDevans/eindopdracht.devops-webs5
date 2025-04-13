@@ -14,13 +14,20 @@ export class HttpRequestService {
     headers: Record<string, string> = {},
   ): Promise<T> {
     try {
+      const config: any = {
+        method,
+        url,
+        headers,
+      };
+
+      if (method === 'GET') {
+        config.params = data;
+      } else {
+        config.data = data;
+      }
+
       const observable: Observable<T> = this.httpService
-        .request<T>({
-          method,
-          url,
-          data,
-          headers,
-        })
+        .request<T>(config)
         .pipe(map((response) => response.data));
 
       return await firstValueFrom(
@@ -28,7 +35,7 @@ export class HttpRequestService {
           catchError((error: AxiosError) => {
             const errorMessage =
               error.response?.data || 'An unknown error occurred!';
-            throw new Error(`HTTP Error: ${errorMessage}`);
+            throw new Error(`HTTP Error: ${JSON.stringify(errorMessage)}`);
           }),
         ),
       );

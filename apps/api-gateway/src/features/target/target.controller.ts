@@ -4,7 +4,6 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
-  UnauthorizedException,
   Body,
   Req,
 } from '@nestjs/common';
@@ -20,7 +19,7 @@ import {
 import { CreateTargetDto } from '@app/types';
 import { CreateTargetDto as GatewayCreateTargetDto } from './dto/create-target.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as jwt from 'jsonwebtoken';
+import { getUuidFromToken } from '@app/auth';
 
 @Controller('target')
 @ApiTags('target')
@@ -57,19 +56,7 @@ export class TargetController {
     @Body() dto: GatewayCreateTargetDto,
     @Req() req: Request,
   ) {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader) {
-      throw new UnauthorizedException('Authorization header is missing');
-    }
-
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.decode(token) as { sub?: string };
-
-    if (!decoded?.sub) {
-      throw new UnauthorizedException(
-        'Invalid token: missing subject (user id)',
-      );
-    }
+    const userUuid = getUuidFromToken(req);
 
     if (!image) {
       throw new BadRequestException('Image is required');
@@ -81,7 +68,7 @@ export class TargetController {
       nearbyLatitude: dto.nearbyLatitude,
       nearbyLongitude: dto.nearbyLongitude,
       radiusMeters: Number(dto.radiusMeters),
-      ownerUuid: decoded.sub,
+      ownerUuid: userUuid,
     };
 
     return this.targetService.create(createTargetDto);
