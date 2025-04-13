@@ -12,13 +12,7 @@ export class ImaggaService {
   ) {}
 
   async getSimilarity(image1Url: string, image2Url: string) {
-    const url =
-      'https://api.imagga.com/v2/images-similarity/categories/' +
-      this.config.categorizer +
-      '?image_url=' +
-      encodeURIComponent(image1Url) +
-      '&image2_url=' +
-      encodeURIComponent(image2Url);
+    const url = this.buildSimilarityUrl(image1Url, image2Url);
 
     const response = await lastValueFrom(
       this.httpService.get(url, {
@@ -28,9 +22,17 @@ export class ImaggaService {
         },
       }),
     );
-    const data = response.data;
-    const distance = data.result.distance;
 
-    return distance;
+    return response.data.result.distance;
+  }
+
+  private buildSimilarityUrl(image1Url: string, image2Url: string): string {
+    const baseUrl = `${this.config.endpoint}/images-similarity/categories/`;
+    const queryParams = new URLSearchParams({
+      image_url: image1Url,
+      image2_url: image2Url,
+    });
+
+    return `${baseUrl}${this.config.categorizer}?${queryParams.toString()}`;
   }
 }
