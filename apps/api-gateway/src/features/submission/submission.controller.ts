@@ -23,6 +23,7 @@ import * as jwt from 'jsonwebtoken';
 import { CreateSubmissionDto as GatewayCreateSubmissionDto } from './dto/create-submission.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateSubmissionDto } from '@app/types';
+import { getUuidFromToken } from '@app/auth';
 
 @Controller('submission')
 @ApiTags('submission')
@@ -35,20 +36,7 @@ export class SubmissionController {
   @ApiResponse({ status: 200 })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async getAll(@Query('targetUuid') targetUuid: string, @Req() req: Request) {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader) {
-      throw new UnauthorizedException('Authorization header is missing');
-    }
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.decode(token) as { sub?: string };
-    const userUuid = decoded?.sub;
-
-    if (!userUuid) {
-      throw new UnauthorizedException(
-        'Invalid token: missing subject (user id)',
-      );
-    }
-
+    const userUuid = getUuidFromToken(req);
     return this.submission.getAll(userUuid, targetUuid);
   }
 
@@ -81,15 +69,7 @@ export class SubmissionController {
     @Body() dto: GatewayCreateSubmissionDto,
     @Req() req: Request,
   ) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.decode(token) as { sub?: string };
-    const userUuid = decoded?.sub;
-    if (!userUuid) {
-      throw new UnauthorizedException(
-        'Invalid token: missing subject (user id)',
-      );
-    }
+    const userUuid = getUuidFromToken(req);
 
     if (!image) {
       throw new UnauthorizedException('Image is required');
@@ -125,14 +105,8 @@ export class SubmissionController {
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async remove(@Body() data: any, @Req() req: Request) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.decode(token) as { sub?: string };
+    const userUuid = getUuidFromToken(req);
 
-    if (!data.uuid) {
-      return { message: 'uuid is required' };
-    }
-
-    return this.submission.remove(data.uuid, decoded.sub);
+    return this.submission.remove(data.uuid, userUuid);
   }
 }
