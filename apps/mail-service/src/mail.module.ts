@@ -8,6 +8,9 @@ import { TargetsController } from './targets/targets.controller';
 import { TargetsModule } from './targets/targets.module';
 import { SubmissionsModule } from './submissions/submissions.module';
 import { PrometheusModule } from '@app/prometheus';
+import { Submission } from './submissions/entities/submission.entity';
+import { Target } from './targets/entity/target.entity';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -18,8 +21,9 @@ import { PrometheusModule } from '@app/prometheus';
       username: process.env.MYSQL_ROOT_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_MAIL_DB,
-      autoLoadEntities: true,
+      entities: [Submission, Target, User],
       synchronize: true,
+      // logging: ['query', 'schema'],
     }),
     KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
