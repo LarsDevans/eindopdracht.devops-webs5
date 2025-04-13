@@ -6,6 +6,8 @@ import {
   UseInterceptors,
   Body,
   Req,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { TargetService } from '../target/target.service';
 import {
@@ -13,6 +15,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -72,5 +75,31 @@ export class TargetController {
     };
 
     return this.targetService.create(createTargetDto);
+  }
+
+  @Get()
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Find a target',
+    description: 'Finds a target with provided data. All fields are optional.',
+  })
+  @ApiQuery({
+    description: 'Latitude coordinate',
+    example: '40.4447 N',
+    name: 'lat',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    description: 'Longtitude coordinate',
+    example: '3.9525 W',
+    name: 'lon',
+    required: false,
+    type: String,
+  })
+  @ApiResponse({ status: 201, description: 'Target created successfully' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  async findAll(@Query('lat') lat: string, @Query('lon') lon: string) {
+    return this.targetService.findAll(lat, lon);
   }
 }

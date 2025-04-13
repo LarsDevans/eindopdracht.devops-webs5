@@ -22,4 +22,17 @@ export class TargetService {
       return error.message;
     }
   }
+
+  async findAll(lat: string, lon: string) {
+    try {
+      return await this.authorizedRequestService.sendAuthorizedRequest<string>(
+        'target',
+        'GET',
+        `${TARGET_SERVICE_URL}?lat=${lat}&lon=${lon}`,
+      );
+    } catch (error) {
+      console.error('Error finding targets:', error);
+      return [];
+    }
+  }
 }
