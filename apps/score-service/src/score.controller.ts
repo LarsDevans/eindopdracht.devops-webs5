@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Query } from '@nestjs/common';
 import { ImaggaService } from '@app/imagga';
 import { CompareImagesDto } from './dto/compare-images.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
@@ -7,6 +7,7 @@ import { TargetsService } from './targets/targets.service';
 import { ScoreService } from './score.service';
 import { SubmissionsService } from './submissions/submissions.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
 
 @Controller('api')
 export class ScoreController {
@@ -15,6 +16,8 @@ export class ScoreController {
     private readonly targetService: TargetsService,
     private readonly scoreService: ScoreService,
     private readonly submissionService: SubmissionsService,
+    @Inject(KAFKA_CLIENT_NAME)
+    private readonly kafkaService: KafkaService,
   ) {}
 
   @MessagePattern('submission.created')
@@ -77,6 +80,31 @@ export class ScoreController {
         message: 'Fout bij verwerking: ' + error.message,
       };
     }
+  }
+
+  @MessagePattern('target.completed')
+  async targetCompleted(@Payload() topicPayload: TopicPayload) {
+    const { targetUuid } = topicPayload.data;
+    if (!targetUuid) {
+      return console.error('Incomplete payload:', topicPayload.data);
+    }
+
+    const submissionWinner =
+      await this.submissionService.findWinner(targetUuid);
+    if (!submissionWinner) {
+      return console.error('No winner found for target:', targetUuid);
+    }
+
+    const winnerUuid = submissionWinner.ownerUuid;
+    this.kafkaService.emit('target.winner', {
+      topic: 'target.winner',
+      timestamp: Date(),
+      data: {
+        targetUuid,
+        winnerUuid,
+        score: submissionWinner.score,
+      },
+    });
   }
 
   @Get('/all')

@@ -40,4 +40,14 @@ export class SubmissionsService {
       reason: `Submission ${uuid} not found.`,
     };
   }
+
+  async findWinner(targetUuid: string) {
+    const submissions = await this.findAll(targetUuid);
+    if (submissions.length === 0) {
+      return null;
+    }
+    return submissions.reduce((prev, current) =>
+      prev.score > current.score ? prev : current,
+    );
+  }
 }

@@ -5,6 +5,7 @@ import { getTargetCreatedTemplate } from './templates/target-created.template';
 import { getTargetCompletedTemplate } from './templates/target-completed.template';
 import { getSubmissionCreatedTemplate } from './templates/submission-created.template';
 import { getNewSubmissionTemplate } from './templates/new-target-submission.template';
+import { getWinnerTemplate } from './templates/winner.template';
 
 @Injectable()
 export class MailService {
@@ -44,6 +45,11 @@ export class MailService {
       targetUuid,
       submissionUuid,
     );
+    this.dispatch([email], subject, body);
+  }
+
+  dispatchWinnerEmail(email: string, targetUuid: string, score: number) {
+    const { subject, body } = getWinnerTemplate(targetUuid, score);
     this.dispatch([email], subject, body);
   }
 
