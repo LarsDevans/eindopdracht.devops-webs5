@@ -6,6 +6,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ClockController } from './clock.controller';
 import { ClockService } from './clock.service';
 import { Clock } from './entities/clock.entity';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { Clock } from './entities/clock.entity';
     }),
     TypeOrmModule.forFeature([Clock]),
     KafkaModule.register({ groupId: 'clock-consumer' }),
+    PrometheusModule,
   ],
   controllers: [ClockController],
   providers: [ClockService],

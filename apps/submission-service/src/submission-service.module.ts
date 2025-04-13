@@ -5,6 +5,7 @@ import { SubmissionServiceController } from './submission-service.controller';
 import { SubmissionServiceService } from './submission-service.service';
 import { ApiKeyGuard } from '@app/auth';
 import { Reflector } from '@nestjs/core';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Reflector } from '@nestjs/core';
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: process.env.MYSQL_SUBMISSION_DB,
     }),
+    PrometheusModule,
   ],
   controllers: [SubmissionServiceController],
   providers: [
