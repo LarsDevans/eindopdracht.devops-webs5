@@ -8,6 +8,8 @@ import { ImaggaModule } from '@app/imagga';
 import { ScoreController } from './score.controller';
 import { PrometheusModule } from '@app/prometheus';
 import { SubmissionsModule } from './submissions/submissions.module';
+import { Reflector } from '@nestjs/core';
+import { ApiKeyGuard } from '@app/auth';
 
 @Module({
   imports: [
@@ -28,6 +30,19 @@ import { SubmissionsModule } from './submissions/submissions.module';
     SubmissionsModule,
   ],
   controllers: [ScoreController],
-  providers: [ScoreService],
+  providers: [
+    ScoreService,
+    {
+      provide: 'APP_GUARD',
+      useFactory: (reflector: Reflector) => {
+        return new ApiKeyGuard(
+          process.env.API_JWT_SECRET_SCORE,
+          process.env.API_KEY_SCORE,
+          reflector,
+        );
+      },
+      inject: [Reflector],
+    },
+  ],
 })
 export class ScoreModule {}

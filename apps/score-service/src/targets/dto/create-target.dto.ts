@@ -23,4 +23,12 @@ export class CreateTargetDto {
     example: '2023-10-01T12:00:00Z',
   })
   createdAt: Date;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'UUID of the owner',
+    example: '35d7b5c2-2f26-4776-ad00-a3f7bddc7158',
+  })
+  ownerUuid: string;
 }

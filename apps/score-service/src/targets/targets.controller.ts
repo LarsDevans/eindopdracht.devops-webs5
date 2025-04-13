@@ -10,7 +10,7 @@ export class TargetsController {
 
   @MessagePattern('target.created')
   async create(@Payload() topicPayload: TopicPayload) {
-    const { uuid, imageUrl } = topicPayload.data;
+    const { uuid, imageUrl, ownerUuid } = topicPayload.data;
 
     if (!uuid || !imageUrl) {
       return console.error('Incomplete payload:', topicPayload.data);
@@ -20,6 +20,7 @@ export class TargetsController {
       uuid,
       imageUrl,
       createdAt: new Date(topicPayload.timestamp),
+      ownerUuid,
     });
     if (result.success) {
       console.log(result.reason);

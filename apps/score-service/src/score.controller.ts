@@ -1,4 +1,4 @@
-import { Body, Controller } from '@nestjs/common';
+import { Body, Controller, Get, Query } from '@nestjs/common';
 import { ImaggaService } from '@app/imagga';
 import { CompareImagesDto } from './dto/compare-images.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
@@ -6,6 +6,7 @@ import { TopicPayload } from '@app/types';
 import { TargetsService } from './targets/targets.service';
 import { ScoreService } from './score.service';
 import { SubmissionsService } from './submissions/submissions.service';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('api')
 export class ScoreController {
@@ -75,5 +76,23 @@ export class ScoreController {
         message: 'Fout bij verwerking: ' + error.message,
       };
     }
+  }
+
+  @Get('/all')
+  @ApiOperation({ summary: 'Get all scores' })
+  @ApiResponse({ status: 200, description: 'All scores' })
+  async getAllScores(
+    @Query('userUuid') userUuid: string,
+    @Query('targetUuid') targetUuid: string,
+  ) {
+    const target = await this.targetService.findOne(targetUuid);
+    if (!target) {
+      return console.error('Target not found:', targetUuid);
+    }
+    if (target.ownerUuid !== userUuid) {
+      return console.error('User is not owner of target:', userUuid);
+    }
+
+    return this.submissionService.findAll(targetUuid);
   }
 }

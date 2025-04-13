@@ -10,4 +10,7 @@ export class Target {
 
   @Column()
   createdAt: Date;
+
+  @Column()
+  ownerUuid: string;
 }
