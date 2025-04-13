@@ -9,13 +9,13 @@ export class Submission {
     private readonly authorizedRequestService: AuthorizedRequestService,
   ) {}
 
-  async getAll(targetUuid: string) {
+  async getAll(userUuid: string, targetUuid: string) {
     try {
       return await this.authorizedRequestService.sendAuthorizedRequest<string>(
         'submission',
         'GET',
         `${SUBMISSION_SERVICE_URL}/all`,
-        { targetUuid },
+        { userUuid, targetUuid },
       );
     } catch (error) {
       console.error('Error:', error);
