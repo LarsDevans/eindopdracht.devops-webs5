@@ -121,7 +121,7 @@ export class SubmissionController {
       },
     },
   })
-  @ApiResponse({ status: 201, description: 'Submission removed successfully' })
+  @ApiResponse({ status: 200, description: 'Submission removed successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async remove(@Body() data: any, @Req() req: Request) {
