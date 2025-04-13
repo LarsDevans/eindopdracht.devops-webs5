@@ -42,19 +42,29 @@ export class SubmissionController {
   ) {
     const targetResult = await this.targetsService.findOne(targetUuid);
     if (!targetResult.data) {
-      return { message: `Can not find target ${targetUuid}` };
+      return { message: `Target with UUID ${targetUuid} not found.` };
     }
 
     const submissionResult = await this.submissionService.findByTarget(
       targetResult.data.uuid,
     );
 
-    if (userUuid == targetResult.data.ownerUuid) {
+    // If user is the owner of the target, return all submissions
+    if (userUuid === targetResult.data.ownerUuid) {
       return submissionResult.data;
     }
 
+    // Otherwise, return only their own submissions (if any)
+    const userSubmissions = submissionResult.data.filter(
+      (submission: { ownerUuid: string }) => submission.ownerUuid === userUuid,
+    );
+
+    if (userSubmissions.length > 0) {
+      return userSubmissions;
+    }
+
     return {
-      message: `You are not allowed to view the details of target ${targetUuid}`,
+      message: `Access denied. You do not own the target or any of its submissions.`,
     };
   }
 
