@@ -25,3 +25,10 @@ services:
     ports:
       - '${TARGET_SERVICE_PORT}:3000'
     restart: unless-stopped
+
+networks:
+  snapnet:
+    driver: bridge
+
+volumes:
+  mysql_data:
