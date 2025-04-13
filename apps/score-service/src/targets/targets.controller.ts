@@ -20,7 +20,5 @@ export class TargetsController {
     if (result.success) {
       console.log(result.reason);
     }
-
-    return result;
   }
 }

@@ -2,14 +2,40 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ImaggaService } from '@app/imagga';
 import { ApiBody } from '@nestjs/swagger';
 import { CompareImagesDto } from './dto/compare-images.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { TopicPayload } from '@app/types';
+import { TargetsService } from './targets/targets.service';
 
 @Controller('api')
 export class AppController {
-  constructor(private readonly imaggaService: ImaggaService) {}
+  constructor(
+    private readonly imaggaService: ImaggaService,
+    private readonly targetService: TargetsService,
+  ) {}
 
-  @Post('process-images')
-  @ApiBody({ type: CompareImagesDto })
-  async processImages(@Body() compareImagesDto: CompareImagesDto) {
+  @MessagePattern('submission.created')
+  async calculateScore(@Payload() topicPayload: TopicPayload) {
+    const { imageUrl, targetUuid, uuid } = topicPayload.data;
+    if (!imageUrl || !targetUuid || !uuid) {
+      return console.error('Incomplete payload:', topicPayload.data);
+    }
+
+    const target = await this.targetService.findOne(targetUuid);
+    if (!target) {
+      console.error('Target not found:', targetUuid);
+      return;
+    }
+
+    const compareImagesDto: CompareImagesDto = {
+      targetImageUrl: target.imageUrl,
+      submissionImageUrl: imageUrl,
+    };
+    const result = await this.processImages(compareImagesDto);
+
+    // Bereken de score op basis van de afstand
+  }
+
+  private async processImages(@Body() compareImagesDto: CompareImagesDto) {
     try {
       const image1 = compareImagesDto.targetImageUrl;
       const image2 = compareImagesDto.submissionImageUrl;
