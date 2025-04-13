@@ -9,7 +9,7 @@ export class Submission {
   targetUuid: string;
 
   @Column()
-  imageBase64: string;
+  imageUrl: string;
 
   @Column()
   ownerUuid: string;

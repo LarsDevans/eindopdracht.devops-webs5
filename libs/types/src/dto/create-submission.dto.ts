@@ -3,19 +3,16 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateSubmissionDto {
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ description: 'UUID of the submission' })
-  uuid: string;
+  @ApiProperty({
+    description: 'Image file in base64 format',
+    example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',
+  })
+  imageBuffer: string;
 
   @IsNotEmpty()
   @IsString()
   @ApiProperty({ description: 'UUID of the target' })
   targetUuid: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ description: 'Base64-encoded image string' })
-  imageBase64: string;
 
   @IsNotEmpty()
   @IsString()

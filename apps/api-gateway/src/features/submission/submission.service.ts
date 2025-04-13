@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SUBMISSION_SERVICE_URL } from '../../config/api.constants';
 import { AuthorizedRequestService } from '../../common/http-requests/authorized-request.service';
-import { CreateSubmissionDto } from './dto/create-submission.dto';
+import { CreateSubmissionDto } from '@app/types';
 
 @Injectable()
 export class Submission {

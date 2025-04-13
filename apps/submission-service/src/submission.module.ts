@@ -8,6 +8,7 @@ import { KafkaModule } from '@app/kafka';
 import { Submission } from './entities/submission.entity';
 import { Reflector } from '@nestjs/core';
 import { ApiKeyGuard } from '@app/auth';
+import { ImgbbModule } from '@app/imgbb';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ApiKeyGuard } from '@app/auth';
     TypeOrmModule.forFeature([Submission]),
     KafkaModule.register({ groupId: 'submission-consumer' }),
     TargetsModule,
+    ImgbbModule,
   ],
   controllers: [SubmissionController],
   providers: [

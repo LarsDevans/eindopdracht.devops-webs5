@@ -3,6 +3,8 @@ import { SubmissionModule } from './submission.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { attachKafka } from '@app/kafka';
+import * as bodyParser from 'body-parser';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app =
@@ -15,6 +17,12 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  app.useGlobalPipes(new ValidationPipe());
+  app.use(bodyParser.json({ limit: process.env.BODY_LIMIT }));
+  app.use(
+    bodyParser.urlencoded({ limit: process.env.BODY_LIMIT, extended: true }),
+  );
 
   await app.listen(process.env.port ?? 3000);
   await attachKafka(app, 'submission-consumer');

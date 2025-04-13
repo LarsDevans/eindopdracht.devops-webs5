@@ -7,17 +7,22 @@ import {
   Query,
   Req,
   UnauthorizedException,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Submission } from './submission.service';
 import * as jwt from 'jsonwebtoken';
-import { CreateSubmissionDto } from './dto/create-submission.dto';
+import { CreateSubmissionDto as GatewayCreateSubmissionDto } from './dto/create-submission.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateSubmissionDto } from '@app/types';
 
 @Controller('submission')
 @ApiTags('submission')
@@ -54,21 +59,46 @@ export class SubmissionController {
     description:
       'Creates a new submission with provided data. All fields are required.',
   })
-  @ApiBody({ type: CreateSubmissionDto })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        targetUuid: {
+          type: 'string',
+          example: '075d989d-e4bc-4e4f-b350-6406dea6b9eb',
+        },
+        image: { type: 'string', format: 'binary' },
+      },
+    },
+  })
   @ApiResponse({ status: 201, description: 'Submission created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @UseInterceptors(FileInterceptor('image'))
   async create(
-    @Body() createSubmissionDto: CreateSubmissionDto,
+    @UploadedFile() image: Express.Multer.File,
+    @Body() dto: GatewayCreateSubmissionDto,
     @Req() req: Request,
   ) {
     const authHeader = req.headers['authorization'];
     const token = authHeader.split(' ')[1];
     const decoded = jwt.decode(token) as { sub?: string };
+    const userUuid = decoded?.sub;
+    if (!userUuid) {
+      throw new UnauthorizedException(
+        'Invalid token: missing subject (user id)',
+      );
+    }
 
-    const submissionDto = {
-      ...createSubmissionDto,
-      ownerUuid: decoded.sub,
+    if (!image) {
+      throw new UnauthorizedException('Image is required');
+    }
+
+    const submissionDto: CreateSubmissionDto = {
+      imageBuffer: image.buffer.toString('base64'),
+      targetUuid: dto.targetUuid,
+      ownerUuid: userUuid,
     };
 
     return this.submission.create(submissionDto);

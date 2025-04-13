@@ -2,23 +2,30 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Submission } from './entities/submission.entity';
 import { Repository } from 'typeorm';
-import { CreateSubmissionDto } from './dto/create-submission.dto';
-import { ActionResult } from '@app/types';
+import { ActionResult, CreateSubmissionDto } from '@app/types';
 import { v4 as uuidv4 } from 'uuid';
+import { ImageUploadService } from '@app/imgbb';
 
 @Injectable()
 export class SubmissionService {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionRepository: Repository<Submission>,
+    private readonly imgbbService: ImageUploadService,
   ) {}
 
   async create(
     createSubmissionDto: CreateSubmissionDto,
   ): Promise<ActionResult> {
+    const imageUrl = await this.imgbbService.uploadBase64Image(
+      createSubmissionDto.imageBuffer,
+    );
+
     const submission = this.submissionRepository.create({
       uuid: uuidv4(),
-      ...createSubmissionDto,
+      targetUuid: createSubmissionDto.targetUuid,
+      imageUrl,
+      ownerUuid: createSubmissionDto.ownerUuid,
     });
     await this.submissionRepository.save(submission);
 

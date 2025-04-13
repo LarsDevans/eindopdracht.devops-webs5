@@ -6,6 +6,7 @@ import {
   Inject,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SubmissionService } from './submission.service';
 import {
@@ -16,11 +17,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
-import { CreateSubmissionDto } from './dto/create-submission.dto';
+import { CreateSubmissionDto } from '@app/types';
 import { TargetsService } from './targets/targets.service';
 import { Payload } from '@nestjs/microservices';
+import { FileInterceptor } from '@nestjs/platform-express';
 
-@ApiBearerAuth()
 @ApiTags('Submission Controller')
 @Controller()
 export class SubmissionController {
@@ -67,6 +68,7 @@ export class SubmissionController {
   @ApiResponse({ status: 201, description: 'Submission created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid request body' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @UseInterceptors(FileInterceptor('image'))
   async create(@Body() createSubmissionDto: CreateSubmissionDto) {
     const targetResult = await this.targetsService.findOne(
       createSubmissionDto.targetUuid,
