@@ -32,7 +32,6 @@ export class SubmissionController {
   ) {}
 
   @Get('/all')
-  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Get all submissions' })
   @ApiResponse({ status: 200 })
   @ApiResponse({ status: 500, description: 'Internal server error' })
