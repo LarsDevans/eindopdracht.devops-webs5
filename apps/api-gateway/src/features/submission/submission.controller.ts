@@ -19,7 +19,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Submission } from './submission.service';
-import * as jwt from 'jsonwebtoken';
 import { CreateSubmissionDto as GatewayCreateSubmissionDto } from './dto/create-submission.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateSubmissionDto } from '@app/types';
