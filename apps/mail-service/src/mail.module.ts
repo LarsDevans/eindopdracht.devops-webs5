@@ -23,7 +23,6 @@ import { User } from './users/entities/user.entity';
       database: process.env.MYSQL_MAIL_DB,
       entities: [Submission, Target, User],
       synchronize: true,
-      // logging: ['query', 'schema'],
     }),
     KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
