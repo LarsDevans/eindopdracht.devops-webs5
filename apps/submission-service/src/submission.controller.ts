@@ -9,13 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { SubmissionService } from './submission.service';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
 import { CreateSubmissionDto } from '@app/types';
 import { TargetsService } from './targets/targets.service';
