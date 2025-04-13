@@ -14,15 +14,11 @@ export class AppController {
       const image1 = compareImagesDto.targetImageUrl;
       const image2 = compareImagesDto.submissionImageUrl;
 
-      // Upload beide afbeeldingen naar de index
-      await this.imaggaService.uploadImagesToIndex(image1, image2);
-
-      // Zoek vergelijkbare afbeeldingen met de eerste afbeelding
-      const results = await this.imaggaService.searchSimilarImages(image1);
+      const result = await this.imaggaService.getSimilarity(image1, image2);
 
       return {
-        message: 'Verwerking voltooid',
-        results,
+        message: 'Afstand tussen de afbeeldingen: ' + result,
+        distance: result,
       };
     } catch (error) {
       console.error('Error processing images:', error);

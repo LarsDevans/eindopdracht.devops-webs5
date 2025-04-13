@@ -6,7 +6,8 @@ export class CompareImagesDto {
   @IsString()
   @ApiProperty({
     description: 'Image URL of the target',
-    example: 'https://example.com/image.jpg',
+    example:
+      'https://imagga.com/static/images/categorization/skyline-14619_640.jpg',
   })
   targetImageUrl: string;
 
@@ -14,7 +15,8 @@ export class CompareImagesDto {
   @IsString()
   @ApiProperty({
     description: 'Image URL of the submission',
-    example: 'https://example.com/image.jpg',
+    example:
+      'https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg',
   })
   submissionImageUrl: string;
 }
