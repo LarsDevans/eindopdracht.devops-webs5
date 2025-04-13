@@ -40,6 +40,20 @@ services:
     restart: on-failure
     volumes:
       - zookeeper_data:/var/lib/zookeeper/data
+  
+  api-gateway:
+    build:
+      args:
+        SERVICE: ${SERVICE_API_GATEWAY}
+    environment:
+      - DB_NAME=${MYSQL_AUTH_DB}
+      - NODE_ENV=${NODE_ENV}
+      - DB_HOST=http://mysql-service
+      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - DB_PORT=${MYSQL_PORT}
+      - DB_USER=${MYSQL_ROOT_USER}
+    ports:
+      - '${API_GATEWAY_PORT}:3000'
 
   kafka-service:
     depends_on:
