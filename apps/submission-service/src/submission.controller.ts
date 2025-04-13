@@ -79,7 +79,7 @@ export class SubmissionController {
 
     if (!targetResult || !targetResult.data) {
       return {
-        message: 'Target not found. Please check the target UUID.',
+        message: 'Target not found. Validate the target UUID.',
         data: null,
       };
     }
