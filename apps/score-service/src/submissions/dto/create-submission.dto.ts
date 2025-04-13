@@ -25,4 +25,12 @@ export class CreateSubmissionDto {
   })
   @IsString()
   targetUuid: string;
+
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'UUID of the owner',
+    example: '35d7b5c2-2f26-4776-ad00-a3f7bddc7158',
+  })
+  @IsString()
+  ownerUuid: string;
 }

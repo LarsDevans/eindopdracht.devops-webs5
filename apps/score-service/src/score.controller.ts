@@ -19,7 +19,7 @@ export class ScoreController {
 
   @MessagePattern('submission.created')
   async calculateScore(@Payload() topicPayload: TopicPayload) {
-    const { imageUrl, targetUuid, uuid } = topicPayload.data;
+    const { imageUrl, targetUuid, uuid, ownerUuid } = topicPayload.data;
     if (!imageUrl || !targetUuid || !uuid) {
       return console.error('Incomplete payload:', topicPayload.data);
     }
@@ -52,10 +52,11 @@ export class ScoreController {
       uuid,
       targetUuid,
       score,
+      ownerUuid,
     });
 
     console.log(
-      `Submission ${uuid} for target ${targetUuid} processed. Score: ${score}`,
+      `Submission ${uuid} of user ${ownerUuid} for target ${targetUuid} processed. Score: ${score}`,
     );
   }
 

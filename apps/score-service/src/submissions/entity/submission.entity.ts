@@ -13,4 +13,7 @@ export class Submission {
 
   @Column()
   targetUuid: string;
+
+  @Column()
+  ownerUuid: string;
 }
