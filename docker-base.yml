@@ -2,9 +2,6 @@ services:
   base-service:
     build:
       context: .
-    depends_on:
-      - mysql-service
-      - kafka-service
     environment:
       - NODE_ENV=${NODE_ENV}
       - DB_HOST=http://mysql-service
@@ -13,3 +10,4 @@ services:
       - DB_USER=${MYSQL_ROOT_USER}
     networks:
       - snapnet
+    restart: unless-stopped
