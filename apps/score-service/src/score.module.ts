@@ -6,6 +6,7 @@ import { KafkaModule } from '@app/kafka';
 import { TargetsModule } from './targets/targets.module';
 import { ImaggaModule } from '@app/imagga';
 import { AppController } from './score.controller';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AppController } from './score.controller';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    PrometheusModule,
     KafkaModule.register({ groupId: 'score-consumer' }),
     TargetsModule,
     ImaggaModule,
