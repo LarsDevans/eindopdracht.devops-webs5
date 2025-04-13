@@ -12,11 +12,7 @@ export class ClockController {
   async create(@Payload() topicPayload: TopicPayload) {
     const { uuid, durationHours } = topicPayload.data;
 
-    const nowUtc = new Date();
-    const deadlineUtc = new Date(
-      nowUtc.getTime() + durationHours * 3600 * 1000, // TODO: This can be a service/function itself. Low priority.
-    );
-
+    const deadlineUtc = this.calculateDeadlineTimeUtc(durationHours);
     const result = await this.clockService.create({
       targetUuid: uuid,
       deadlineUtc: deadlineUtc,
@@ -24,5 +20,10 @@ export class ClockController {
     if (result.success) {
       console.log(result.reason);
     }
+  }
+
+  calculateDeadlineTimeUtc(durationHours: number): Date {
+    const nowUtc = new Date();
+    return new Date(nowUtc.getTime() + durationHours * 3600 * 1000);
   }
 }
