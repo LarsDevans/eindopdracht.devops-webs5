@@ -3,33 +3,47 @@ services:
     image: prom/prometheus:latest
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:9090/-/healthy || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - snapnet
     ports:
       - '${PROMETHEUS_PORT}:9090'
+    restart: unless-stopped
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus
 
   grafana:
     depends_on:
-      - prometheus
+      prometheus:
+        condition: service_healthy
     image: grafana/grafana:latest
     networks:
       - snapnet
     ports:
       - '${GRAFANA_PORT}:3000'
+    restart: unless-stopped
     volumes:
       - grafana_data:/var/lib/grafana
 
   mysql-service:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: mysql:9
     networks:
       - snapnet
     ports:
       - '${MYSQL_PORT}:3306'
+    restart: unless-stopped
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
@@ -38,15 +52,22 @@ services:
   zookeeper-service:
     environment:
       ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "${ZOOKEEPER_PORT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: confluentinc/cp-zookeeper:7.5.0
     networks:
       - snapnet
+    restart: on-failure
     volumes:
       - zookeeper_data:/var/lib/zookeeper/data
 
   kafka-service:
     depends_on:
-      - zookeeper-service
+      zookeeper-service:
+        condition: service_healthy
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: ${SERVICE_ZOOKEEPER_SERVICE}:${ZOOKEEPER_PORT}
@@ -57,11 +78,17 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_INTERNAL_LISTENER: PLAINTEXT
       KAFKA_LISTENER_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     image: confluentinc/cp-kafka:7.5.0
     networks:
       - snapnet
     ports:
       - '${KAFKA_PORT}:9092'
+    restart: on-failure
     volumes:
       - kafka_data:/var/lib/kafka/data
 
@@ -76,6 +103,7 @@ services:
       - snapnet
     ports:
       - '${KAFKA_UI_PORT}:8080'
+    restart: on-failure
 
   # Application Services (Clock, Mail, Read, Score, Submission, Target and API Gateway)
   clock-service:
