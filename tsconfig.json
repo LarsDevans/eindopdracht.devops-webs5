@@ -43,6 +43,12 @@
       "@app/kafka/*": [
         "libs/kafka/src/*"
       ],
+      "@app/prometheus": [
+        "libs/prometheus/src"
+      ],
+      "@app/prometheus/*": [
+        "libs/prometheus/src/*"
+      ],
       "@app/types": [
         "libs/types/src"
       ],

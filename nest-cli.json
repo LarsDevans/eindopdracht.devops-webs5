@@ -73,6 +73,15 @@
         "tsConfigPath": "apps/mail-service/tsconfig.app.json"
       }
     },
+    "prometheus": {
+      "type": "library",
+      "root": "libs/prometheus",
+      "entryFile": "index",
+      "sourceRoot": "libs/prometheus/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prometheus/tsconfig.lib.json"
+      }
+    },
     "read-service": {
       "type": "application",
       "root": "apps/read-service",

@@ -1,3 +1,4 @@
+import { UnauthorizedException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
 export function generateOpaqueToken(service: string): string {
@@ -21,4 +22,18 @@ export function generateOpaqueToken(service: string): string {
     expiresIn: expiresIn,
     subject: 'gateway-auth',
   });
+}
+
+export function getUuidFromToken(req: Request): string | null {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    throw new UnauthorizedException('Authorization header is missing');
+  }
+  const token = authHeader.split(' ')[1];
+  const decoded = jwt.decode(token) as { sub?: string };
+  const userUuid = decoded?.sub;
+  if (!userUuid) {
+    throw new UnauthorizedException('Invalid token: missing subject (user id)');
+  }
+  return userUuid;
 }

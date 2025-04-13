@@ -6,6 +6,8 @@ import { MailService } from './mail.service';
 import { UsersModule } from './users/users.module';
 import { TargetsController } from './targets/targets.controller';
 import { TargetsModule } from './targets/targets.module';
+import { SubmissionsModule } from './submissions/submissions.module';
+import { PrometheusModule } from '@app/prometheus';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { TargetsModule } from './targets/targets.module';
     KafkaModule.register({ groupId: 'mail-consumer' }),
     UsersModule,
     TargetsModule,
+    SubmissionsModule,
+    PrometheusModule,
   ],
   providers: [MailService],
   controllers: [TargetsController],

@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { getWelcomeTemplate } from './templates/welcome.template';
 import { getTargetCreatedTemplate } from './templates/target-created.template';
 import { getTargetCompletedTemplate } from './templates/target-completed.template';
+import { getSubmissionCreatedTemplate } from './templates/submission-created.template';
+import { getNewSubmissionTemplate } from './templates/new-target-submission.template';
 
 @Injectable()
 export class MailService {
@@ -18,6 +20,30 @@ export class MailService {
 
   dispatchTargetCompletedEmail(email: string, targetUuid: string) {
     const { subject, body } = getTargetCompletedTemplate(targetUuid);
+    this.dispatch([email], subject, body);
+  }
+
+  dispatchSubmissionCreatedEmail(
+    email: string,
+    targetUuid: string,
+    submissionUuid: string,
+  ) {
+    const { subject, body } = getSubmissionCreatedTemplate(
+      targetUuid,
+      submissionUuid,
+    );
+    this.dispatch([email], subject, body);
+  }
+
+  dispatchNewSubmissionEmail(
+    email: string,
+    targetUuid: string,
+    submissionUuid: string,
+  ) {
+    const { subject, body } = getNewSubmissionTemplate(
+      targetUuid,
+      submissionUuid,
+    );
     this.dispatch([email], subject, body);
   }
 
