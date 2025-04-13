@@ -5,8 +5,9 @@ import { ScoreService } from './score.service';
 import { KafkaModule } from '@app/kafka';
 import { TargetsModule } from './targets/targets.module';
 import { ImaggaModule } from '@app/imagga';
-import { AppController } from './score.controller';
+import { ScoreController } from './score.controller';
 import { PrometheusModule } from '@app/prometheus';
+import { SubmissionsModule } from './submissions/submissions.module';
 
 @Module({
   imports: [
@@ -24,8 +25,9 @@ import { PrometheusModule } from '@app/prometheus';
     KafkaModule.register({ groupId: 'score-consumer' }),
     TargetsModule,
     ImaggaModule,
+    SubmissionsModule,
   ],
-  controllers: [AppController],
+  controllers: [ScoreController],
   providers: [ScoreService],
 })
 export class ScoreModule {}

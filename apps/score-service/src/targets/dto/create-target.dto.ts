@@ -17,4 +17,10 @@ export class CreateTargetDto {
     example: 'https://example.com/image.jpg',
   })
   imageUrl: string;
+
+  @ApiProperty({
+    description: 'Timestamp of the target creation',
+    example: '2023-10-01T12:00:00Z',
+  })
+  createdAt: Date;
 }

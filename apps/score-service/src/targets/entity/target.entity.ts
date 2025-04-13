@@ -7,4 +7,7 @@ export class Target {
 
   @Column()
   imageUrl: string;
+
+  @Column()
+  createdAt: Date;
 }

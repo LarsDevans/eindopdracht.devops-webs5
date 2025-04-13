@@ -16,7 +16,11 @@ export class TargetsController {
       return console.error('Incomplete payload:', topicPayload.data);
     }
 
-    const result = await this.targetService.create({ uuid, imageUrl });
+    const result = await this.targetService.create({
+      uuid,
+      imageUrl,
+      createdAt: new Date(topicPayload.timestamp),
+    });
     if (result.success) {
       console.log(result.reason);
     }

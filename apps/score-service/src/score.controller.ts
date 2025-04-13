@@ -1,16 +1,19 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller } from '@nestjs/common';
 import { ImaggaService } from '@app/imagga';
-import { ApiBody } from '@nestjs/swagger';
 import { CompareImagesDto } from './dto/compare-images.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { TopicPayload } from '@app/types';
 import { TargetsService } from './targets/targets.service';
+import { ScoreService } from './score.service';
+import { SubmissionsService } from './submissions/submissions.service';
 
 @Controller('api')
-export class AppController {
+export class ScoreController {
   constructor(
     private readonly imaggaService: ImaggaService,
     private readonly targetService: TargetsService,
+    private readonly scoreService: ScoreService,
+    private readonly submissionService: SubmissionsService,
   ) {}
 
   @MessagePattern('submission.created')
@@ -31,8 +34,28 @@ export class AppController {
       submissionImageUrl: imageUrl,
     };
     const result = await this.processImages(compareImagesDto);
+    if (result.distance === undefined) {
+      return console.error('Error processing images:', result);
+    }
 
-    // Bereken de score op basis van de afstand
+    const submissionTime = topicPayload.timestamp;
+    const targetTime = target.createdAt;
+
+    const score = await this.scoreService.calculateScore(
+      result.distance,
+      new Date(submissionTime),
+      new Date(targetTime),
+    );
+
+    this.submissionService.create({
+      uuid,
+      targetUuid,
+      score,
+    });
+
+    console.log(
+      `Submission ${uuid} for target ${targetUuid} processed. Score: ${score}`,
+    );
   }
 
   private async processImages(@Body() compareImagesDto: CompareImagesDto) {
