@@ -26,9 +26,53 @@ services:
       - '${TARGET_SERVICE_PORT}:3000'
     restart: unless-stopped
 
+  zookeeper-service:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "${ZOOKEEPER_PORT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    image: confluentinc/cp-zookeeper:7.5.0
+    networks:
+      - snapnet
+    restart: on-failure
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+
+  kafka-service:
+    depends_on:
+      zookeeper-service:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ${SERVICE_ZOOKEEPER_SERVICE}:${ZOOKEEPER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${SERVICE_KAFKA_SERVICE}:${KAFKA_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_LISTENER_NAME_INTERNAL_LISTENER: INTERNAL
+      KAFKA_LISTENER_PORT_INTERNAL_LISTENER: ${KAFKA_INTERNAL_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_INTERNAL_LISTENER: PLAINTEXT
+      KAFKA_LISTENER_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    image: confluentinc/cp-kafka:7.5.0
+    networks:
+      - snapnet
+    ports:
+      - '${KAFKA_PORT}:9092'
+    restart: on-failure
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
 networks:
   snapnet:
     driver: bridge
 
 volumes:
   mysql_data:
+  kafka_data:
