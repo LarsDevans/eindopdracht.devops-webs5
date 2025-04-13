@@ -37,6 +37,15 @@
         "tsConfigPath": "apps/clock-service/tsconfig.app.json"
       }
     },
+    "imagga": {
+      "type": "library",
+      "root": "libs/imagga",
+      "entryFile": "index",
+      "sourceRoot": "libs/imagga/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/imagga/tsconfig.lib.json"
+      }
+    },
     "imgbb": {
       "type": "library",
       "root": "libs/imgbb",

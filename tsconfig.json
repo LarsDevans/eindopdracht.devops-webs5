@@ -17,12 +17,19 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true,
     "paths": {
       "@app/auth": [
         "libs/auth/src"
       ],
       "@app/auth/*": [
         "libs/auth/src/*"
+      ],
+      "@app/imagga": [
+        "libs/imagga/src"
+      ],
+      "@app/imagga/*": [
+        "libs/imagga/src/*"
       ],
       "@app/imgbb": [
         "libs/imgbb/src"

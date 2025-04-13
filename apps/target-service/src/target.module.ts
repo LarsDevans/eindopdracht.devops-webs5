@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Target } from './entities/target.entity';
 import { TargetController } from './target.controller';
 import { TargetService } from './target.service';
-import { APP_GUARD, Reflector } from '@nestjs/core';
+import { Reflector } from '@nestjs/core';
 import { ImgbbModule } from '@app/imgbb';
 import { ApiKeyGuard } from '@app/auth';
 import { PrometheusModule } from '@app/prometheus';
@@ -31,7 +31,7 @@ import { PrometheusModule } from '@app/prometheus';
   providers: [
     TargetService,
     {
-      provide: APP_GUARD,
+      provide: 'APP_GUARD',
       useFactory: (reflector: Reflector) => {
         return new ApiKeyGuard(
           process.env.API_JWT_SECRET_TARGET,

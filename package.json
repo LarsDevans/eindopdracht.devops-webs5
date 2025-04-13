@@ -36,6 +36,7 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "form-data": "^4.0.2",
     "kafkajs": "^2.2.4",
     "mysql2": "^3.14.0",
     "opossum": "^8.4.0",
@@ -97,6 +98,7 @@
     ],
     "moduleNameMapper": {
       "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
+      "^@app/imagga(|/.*)$": "<rootDir>/libs/imagga/src/$1",
       "^@app/imgbb(|/.*)$": "<rootDir>/libs/imgbb/src/$1",
       "^@app/kafka(|/.*)$": "<rootDir>/libs/kafka/src/$1",
       "^@app/prometheus(|/.*)$": "<rootDir>/libs/prometheus/src/$1",

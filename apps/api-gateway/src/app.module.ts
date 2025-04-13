@@ -9,6 +9,7 @@ import { TargetModule } from './features/target/target.module';
 import { HttpModule } from '@nestjs/axios';
 import { SubmissionModule } from './features/submission/submission.module';
 import { PrometheusModule } from '@app/prometheus';
+import { ScoreModule } from './features/score/score.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PrometheusModule } from '@app/prometheus';
     TargetModule,
     SubmissionModule,
     PrometheusModule,
+    ScoreModule,
   ],
   controllers: [AppController],
   providers: [

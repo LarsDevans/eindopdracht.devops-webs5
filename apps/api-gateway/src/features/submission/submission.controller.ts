@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Post,
   Query,
   Req,
@@ -21,13 +22,18 @@ import {
 import { Submission } from './submission.service';
 import { CreateSubmissionDto as GatewayCreateSubmissionDto } from './dto/create-submission.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateSubmissionDto } from '@app/types';
+import { CreateSubmissionDto, TopicPayload } from '@app/types';
 import { getUuidFromToken } from '@app/auth';
+import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
 
 @Controller('submission')
 @ApiTags('submission')
 export class SubmissionController {
-  constructor(private readonly submission: Submission) {}
+  constructor(
+    private readonly submission: Submission,
+    @Inject(KAFKA_CLIENT_NAME)
+    private readonly kafkaService: KafkaService,
+  ) {}
 
   @Get('/all')
   @ApiBearerAuth('access-token')
@@ -106,6 +112,15 @@ export class SubmissionController {
   async remove(@Body() data: any, @Req() req: Request) {
     const userUuid = getUuidFromToken(req);
 
-    return this.submission.remove(data.uuid, userUuid);
+    this.submission.remove(data.uuid, userUuid);
+    const payload: TopicPayload = {
+      topic: 'submission.deleted',
+      timestamp: Date(),
+      data: {
+        uuid: data.uuid,
+      },
+    };
+
+    this.kafkaService.emit('submission.deleted', payload);
   }
 }

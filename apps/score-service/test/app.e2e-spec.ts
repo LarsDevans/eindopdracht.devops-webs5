@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { ScoreServiceModule } from './../src/score-service.module';
+import { ScoreServiceModule } from '../src/score.module';
 
 describe('ScoreServiceController (e2e)', () => {
   let app: INestApplication;
