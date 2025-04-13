@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TARGET_SERVICE_URL } from '../../config/api.constants';
+import { SCORE_SERVICE_URL } from '../../config/api.constants';
 import { AuthorizedRequestService } from '../../common/http-requests/authorized-request.service';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ScoreService {
       return await this.authorizedRequestService.sendAuthorizedRequest<string>(
         'score',
         'GET',
-        `${TARGET_SERVICE_URL}/all`,
+        `${SCORE_SERVICE_URL}/all`,
         { userUuid, targetUuid },
       );
     } catch (error) {

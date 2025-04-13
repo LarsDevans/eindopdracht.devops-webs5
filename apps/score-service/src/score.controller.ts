@@ -9,7 +9,7 @@ import { SubmissionsService } from './submissions/submissions.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { KAFKA_CLIENT_NAME, KafkaService } from '@app/kafka';
 
-@Controller('api')
+@Controller()
 export class ScoreController {
   constructor(
     private readonly imaggaService: ImaggaService,
@@ -110,6 +110,7 @@ export class ScoreController {
   @Get('/all')
   @ApiOperation({ summary: 'Get all scores' })
   @ApiResponse({ status: 200, description: 'All scores' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async getAllScores(
     @Query('userUuid') userUuid: string,
     @Query('targetUuid') targetUuid: string,
